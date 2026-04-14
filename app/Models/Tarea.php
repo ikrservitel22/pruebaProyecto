@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tarea extends Model
 {
-    protected $fillable = [        
+    protected $table = 'registro'; // tabla del sql
+
+    protected $fillable = [        //datos de ingreso 
         'usuario',
         'clave',
         'nombre',

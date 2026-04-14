@@ -32,9 +32,11 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-    volume:
-      -db_data:./www/var
-      -
+    volumes:
+      - pruv_volumen:/var/lib/mysql
     ports:
       - "3306:3306"
+
+volumes:
+  pruv_volumen:
 
