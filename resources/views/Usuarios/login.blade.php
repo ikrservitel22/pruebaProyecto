@@ -24,8 +24,12 @@
 
             <button type="submit" class="btn border rounded bg-light me-2">iniciar sesion</button>
 
-            <a href="/create" class="btn border rounded bg-light">
+            <a href="/create" class="btn border rounded bg-light me-2">
                 crear cuenta
+            </a>
+
+            <a href="/inputtt" class="btn border rounded bg-light">
+                lista de inputs
             </a>
 
         </div>
