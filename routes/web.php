@@ -11,6 +11,8 @@ Route::get('/lista', [TareaController::class, 'lista']);
 
 Route::post('/create', [TareaController::class, 'create']);
 
+Route::get('/inputtt', [TareaController::class, 'inputtt']);
+
 Route::get('/create', function () {
     return view('Usuarios.create');
 });

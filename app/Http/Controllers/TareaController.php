@@ -10,7 +10,7 @@ class TareaController extends Controller
     public function index()
     {
         $tareas = Tarea::all();
-        return view('Usuarios.inputtt', compact('tareas')); //muestra la vista login
+        return view('Usuarios.login', compact('tareas')); //muestra la vista login
     }
 
     public function create(Request $request)
@@ -58,8 +58,8 @@ class TareaController extends Controller
 
     public function inputtt()
     {
-        $tareas = Tarea::all(); // trae datos de la BD
-        return view('Usuarios.inputtt', compact('tareas'));
+        $tareas = Tarea::all();
+        return view('Usuarios.inputtt', compact('tareas')); 
     }
 
 }
