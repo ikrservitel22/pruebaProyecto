@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('Button') {{-- muestra el boton solo en esta vista--}}
+    <a href="/" class="btn border btn-dark">Exit</a>
+@endsection
+
 @section('content')
 
     <h1 class="text-muted text-center fw-bold">CREAR CUENTA</h1>
