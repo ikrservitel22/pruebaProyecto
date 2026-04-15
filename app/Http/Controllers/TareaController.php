@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 class TareaController extends Controller
 {
     public function index()
-    {
+    {   
         $tareas = Tarea::all();
-        return view('Usuarios.login', compact('tareas')); //muestra la vista login
+        return view('Usuarios.principal', compact('tareas')); //muestra la vista login
     }
 
     public function create(Request $request)
@@ -27,26 +27,24 @@ class TareaController extends Controller
                     'nombre' => $request->nombre,
                     'usuario' => $request->usuario,
                     'clave' => $request->clave
-
                 ]);
-
             }
-
-        return redirect('/')->with('success', 'usuario creado');
-
+        return redirect('/login')->with('success', 'usuario creado');
     }
 
     public function login(Request $request) // flitra si el usuario y contraseña coinciden
     {   
-
         $user = Tarea::where('usuario', $request->usuario)
                     ->where('clave', $request->clave)
                     ->first();
-
         if ($user) {
-            return redirect('/lista'); // sí existe
+            session([
+                'usuario' => $user->usuario, //guardo el usuario 
+                'id' => $user->usuario_id
+            ]);
+            return redirect('/')->with('success', 'Sesión iniciada correctamente'); // sí existe
         } else {
-            return redirect('/')->with('error', 'Usuario o clave incorrectos'); // da error
+            return redirect('/login')->with('error', 'Usuario o clave incorrectos'); // da error
         }   
     }
 

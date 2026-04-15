@@ -7,27 +7,29 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body>
+<body class="d-flex flex-column height: 100% mt-auto">
 
-    <!-- 🔝 HEADER -->
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">proyecto prueva</a>
-        </div>
-    </nav>
+    @if(!isset($hideHeader))
+        @include('layouts.headerprv')
+    @endif 
 
-    <!-- 📦 CONTENIDO -->
-    <div class="container mt-5">
+    <div class="container mt-5 flex-fill flex-grow-1 p-4">
         @yield('content')
     </div>
 
-    <!-- 🔽 parte de abajo -->
-    <footer class="bg-dark text-white text-center p-5 mt-5">
-        <p>parte de abajo</p>
-    </footer>
+    @if(!isset($hideSidebar))
+        @include('layouts.sidebar', ['menu' => $menu])
+    @endif 
+
+    @if(!isset($hideFooter))
+        @include('layouts.footer')
+    @endif 
+
 
     @if(session('success'))
     <script>
@@ -59,5 +61,47 @@
     </script>
     @endif
 
+    <style>
+        .accordion-button {
+            background-color: #3b4046;
+            color: white;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: #565660;
+            color: white;
+        }
+
+        .accordion-button::after {
+            filter: invert(1);
+        }
+    </style>
+
+    <script>
+        let abierto = true;
+
+        function toggleSidebar() {
+            let sidebar = document.getElementById('sidebar');
+
+            if (abierto) {
+                sidebar.style.right = '-250px';
+            } else {
+                sidebar.style.right = '0';
+            }
+
+            abierto = !abierto;
+        }
+    </script>
+
 </body>
 </html>
+
+{{-- 
+@php
+    $hideHeader = true;// oculta el header
+@endphp
+
+@php
+    $hideFooter = true;// oculta el footer
+@endphp 
+--}}

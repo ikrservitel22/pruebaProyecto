@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@if(session()->has('usuario'))
+    @section('Button') {{-- muestra el boton solo en esta vista--}}
+        <a href="/logout" class="btn btn-outline-light">Cerrar Sesión</a>
+    @endsection
+@endif
+
 @section('content')
 
     <h1 class="text-muted text-center fw-bold">CREAR CUENTA</h1>
@@ -35,5 +41,6 @@
 
         </div>
     </form>
+
 
 @endsection
