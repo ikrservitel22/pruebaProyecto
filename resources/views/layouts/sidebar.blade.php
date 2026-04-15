@@ -9,7 +9,7 @@
             <li class="mb-1">
 
                 <!-- BOTÓN PRINCIPAL -->
-                <button class=" collapse btn btn-toggle align-items-center rounded border text-white w-100 text-start"
+                <button class=" btn btn-toggle align-items-center rounded border text-white w-100 text-start"
                         data-bs-toggle="collapse"
                         data-bs-target="#menu-{{ $index }}"
                         aria-expanded="false">
