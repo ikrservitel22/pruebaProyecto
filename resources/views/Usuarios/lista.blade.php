@@ -10,7 +10,7 @@
 
     <div class="accordion" id="accordionExample">
 
-    @foreach($tareas as $tarea)
+    @foreach($Usuarios as $Usuario)
         <div class="accordion-item borer">
             <h2 class="accordion-header">
                 <button 
@@ -20,7 +20,7 @@
                     data-bs-target="#collapse{{ $loop->index }}" 
                     aria-expanded="false"
                 >
-                    Usuario: {{ $tarea->usuario }}
+                    Usuario: {{ $Usuario->usuario }}
                 </button>
             </h2>
 
@@ -30,9 +30,20 @@
                 data-bs-parent="#accordionExample"
             >
                 <div class="accordion-body">
-                    <p><strong>Nombre:</strong> {{ $tarea->nombre }}</p>
-                    <p><strong>Password:</strong> {{ $tarea->clave }}</p>
+                    <p><strong>Nombre:</strong> {{ $Usuario->nombre }}</p>
+                    <p><strong>Password:</strong> {{ $Usuario->clave }}</p>
+                    @if(session()->has('id'))
+                        @php
+                            $usuario = \App\Models\Usuarios::find(session('id'));
+                        @endphp
+
+                        @if($usuario && $usuario->permisos->contains('permiso_id', 1))
+                            <!-- CONTENIDO SOLO PARA USUARIOS CON PERMISO -->
+                            <a href="/CreateUP" class="btn btn-outline-light bg-danger">Borrar</a>
+                        @endif
+                    @endif
                 </div>
+
             </div>
         </div>
     @endforeach

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use App\Models\Usuarios;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,14 +21,28 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::share('menu', [
-            [
-                'titulo' => 'Usuarios',
-                'items' => [
-                    ['nombre' => 'Lista', 'url' => '/lista'],
-                    ['nombre' => 'Crear', 'url' => '/create'],
+        View::composer('*', function ($view) {
+            $items = [
+                ['nombre' => 'Crear Nuevo Usuario', 'url' => '/CreateUP'],
+                ['nombre' => 'Lista De Usuarios', 'url' => '/lista'],
+                ['nombre' => 'Lista De Inputs', 'url' => '/inputtt'],
+                ['nombre' => 'Lista', 'url' => '/lista'],
+            ];
+    /*        if (session()->has('id')) {
+                $usuario = \App\Models\Usuarios::find(session('id'));
+
+                if ($usuario && $usuario->permisos->contains('permiso_id', 1)) {
+                    $items[] = ['nombre' => 'Lista', 'url' => '/Usuarios'];
+                }
+            }*/
+            $menu = [
+                [
+                    'titulo' => 'Usuarios',
+                    'items' => $items
                 ]
-            ]
-        ]);
+            ];
+
+            $view->with('menu', $menu);
+        });
     }
 }
