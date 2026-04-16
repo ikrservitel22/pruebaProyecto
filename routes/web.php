@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\TareaController;
+use App\Http\Controllers\UsuariosController;
 use Illuminate\Http\Request;
-use App\Models\Tarea;
+use App\Models\Usuarios;
 use App\Http\Middleware\CheckSession;
+use App\Http\Controllers\CreateUPController;
 
 
-Route::get('/', [TareaController::class, 'index']);
+Route::get('/', [UsuariosController::class, 'index']);
 
-Route::post('/login', [TareaController::class, 'login']);
+Route::post('/login', [UsuariosController::class, 'login']);
 
 Route::get('/login', function () {
     return view('Usuarios.login');
@@ -29,11 +30,11 @@ Route::get('/logout', function () {
     return view('Usuarios.principal');
 });
 
-Route::get('/lista', [TareaController::class, 'lista']);
+Route::get('/lista', [UsuariosController::class, 'lista']);
 
-Route::post('/create', [TareaController::class, 'create']);
+Route::post('/create', [UsuariosController::class, 'create']);
 
-Route::get('/inputtt', [TareaController::class, 'inputtt']);
+Route::get('/inputtt', [UsuariosController::class, 'inputtt']);
 
 Route::get('/create', function () {
     return view('Usuarios.create');
@@ -41,11 +42,17 @@ Route::get('/create', function () {
 
 Route::get('/buscar', function () {
     $busqueda = request('q'); // obtiene el valor del parámetro de búsqueda "q" de la URL
-    $tareas = Tarea::where('usuario', 'LIKE', "%$busqueda%")->get(); // busca en la tabla "registro" los registros donde el campo "usuario" contenga el valor de búsqueda
+    $tareas = Usuarios::where('usuario', 'LIKE', "%$busqueda%")->get(); // busca en la tabla "registro" los registros donde el campo "usuario" contenga el valor de búsqueda
     return view('Usuarios.lista', compact('tareas')); // devuelve la vista "lista" con los resultados de la búsqueda
 });
 
 Route::middleware(['check.session'])->group(function () {
-    Route::get('/lista', [TareaController::class, 'lista']);
-    Route::get('/inputtt', [TareaController::class, 'inputtt']);
+    Route::get('/lista', [UsuariosController::class, 'lista']);
+    Route::get('/inputtt', [UsuariosController::class, 'inputtt']);
 });
+
+Route::get('/CreateUP', function () {
+    return view('CRUD.CreateUP');
+});
+
+Route::post('/CreateUP', [CreateUPController::class, 'CreateUP']);

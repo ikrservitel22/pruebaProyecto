@@ -75,6 +75,24 @@
         .accordion-button::after {
             filter: invert(1);
         }
+        .form-select {
+            background-color: #fefefe;
+            color: white;
+            border: 1px solid #ffffff;
+        }
+
+        .form-select:focus {
+            border-color: #0f84d3;
+            box-shadow: 0 0 5px rgba(84, 80, 69, 0.57);
+        }
+        .form-select option:checked {
+            background-color: #a0a0a0c9;
+            color: white;
+        }
+        .form-select option {
+            background-color: #ebe9e9;
+            color: black;
+        }
     </style>
 
     <script>
@@ -92,7 +110,6 @@
             abierto = !abierto;
         }
     </script>
-
 </body>
 </html>
 

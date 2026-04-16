@@ -24,7 +24,7 @@
                         @foreach($grupo['items'] as $item)
                             <li>
                                 <a href="{{ $item['url'] }}"
-                                   class="text-white text-decoration-none d-block px-3 py-1 rounded hover-menu">
+                                   class="text-white mt-4 text-decoration-none d-block px-3 py-1 rounded hover-menu">
                                     {{ $item['nombre'] }}
                                 </a>
                             </li>
