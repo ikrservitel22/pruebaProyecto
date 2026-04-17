@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Usuarios;
 use App\Http\Middleware\CheckSession;
 use App\Http\Controllers\CreateUPController;
+use App\Http\Controllers\DeleteController;
 
 
 Route::get('/', [UsuariosController::class, 'index']);
@@ -30,7 +31,7 @@ Route::get('/logout', function () {
     return view('Usuarios.principal');
 });
 
-Route::get('/lista', [UsuariosController::class, 'lista']);
+Route::get('/lista', [UsuariosController::class, 'lista'])->name('Usuarios.lista');
 
 Route::post('/create', [UsuariosController::class, 'create']);
 
@@ -42,8 +43,8 @@ Route::get('/create', function () {
 
 Route::get('/buscar', function () {
     $busqueda = request('q'); // obtiene el valor del parámetro de búsqueda "q" de la URL
-    $tareas = Usuarios::where('usuario', 'LIKE', "%$busqueda%")->get(); // busca en la tabla "registro" los registros donde el campo "usuario" contenga el valor de búsqueda
-    return view('Usuarios.lista', compact('tareas')); // devuelve la vista "lista" con los resultados de la búsqueda
+    $Usuarios = Usuarios::where('usuario', 'LIKE', "%$busqueda%")->get(); // busca en la tabla "registro" los registros donde el campo "usuario" contenga el valor de búsqueda
+    return view('Usuarios.lista', compact('Usuarios')); // devuelve la vista "lista" con los resultados de la búsqueda
 });
 
 Route::middleware(['check.session'])->group(function () {
@@ -56,3 +57,6 @@ Route::get('/CreateUP', function () {
 });
 
 Route::post('/CreateUP', [CreateUPController::class, 'CreateUP']);
+
+Route::delete('/usuarios/{id}', [DeleteController::class, 'destroy'])
+    ->name('usuarios.destroy');

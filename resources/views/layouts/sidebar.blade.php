@@ -1,40 +1,29 @@
-<div class="bg-secondary text-white position-fixed end-0 p-3"
-     style="width: 230px; height: d-flex flex-column h-100; top: 56px; overflow-y: auto;">
+<div id="sidebar" class="position-fixed start-0 bg-secondary text-white d-flex flex-column p-3 shadow" style="width: 250px; overflow-y: auto; z-index: 1040; top: 0; height: 100vh; left: 0; transform: translateX(-100%); transition: transform .3s;">
+    <div class="mb-4 text-center">
+        <h5 class="mb-1 border-bottom">Menú</h5>
+        <small class="text-muted">CRUD y sesión</small>
+    </div>
 
-    <h5 class=" text-center border-bottom pb-2 mb-3">Menú</h5>
-
-    <ul class="list-unstyled ps-0">
-
-        @foreach($menu as $index => $grupo)
-            <li class="mb-1">
-
-                <!-- BOTÓN PRINCIPAL -->
-                <button class=" btn btn-toggle align-items-center rounded border text-white w-100 text-start"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#menu-{{ $index }}"
-                        aria-expanded="false">
-
-                    {{ $grupo['titulo'] }}
-                </button>
-
-                <!-- SUBMENÚ -->
-                <div class="collapse" id="menu-{{ $index }}">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-
-                        @foreach($grupo['items'] as $item)
-                            <li>
-                                <a href="{{ $item['url'] }}"
-                                   class="text-white mt-4 text-decoration-none d-block px-3 py-1 rounded hover-menu">
-                                    {{ $item['nombre'] }}
-                                </a>
-                            </li>
-                        @endforeach
-
-                    </ul>
+    @if(session()->has('usuario'))
+        @foreach($menu as $grupo)
+            <div class="mb-3">
+                <h6 class="text-uppercase text-white small mb-2 ">{{ $grupo['titulo'] }}</h6>
+                <div class="list-group list-group-flush">
+                    @foreach($grupo['items'] as $item)
+                        <a href="{{ $item['url'] }}" class="list-group-item list-group-item-action bg-secondary text-white-50 border-secondary">
+                            {{ $item['nombre'] }}
+                        </a>
+                    @endforeach
                 </div>
-
-            </li>
+            </div>
         @endforeach
 
-    </ul>
+        <div class="mt-auto pt-3 border-top border-secondary">
+            <a href="/logout" class="btn btn-secondary w-100">Cerrar sesión</a>
+        </div>
+    @else
+        <div class="alert alert-secondary py-3 mt-3">
+            Inicia sesión para acceder al menú CRUD.
+        </div>
+    @endif
 </div>

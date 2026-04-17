@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Usuarios;
 use Illuminate\Http\Request;
 use App\Models\CreateUP;
+use App\Models\Perusu;
 
 class UsuariosController extends Controller
 {
@@ -23,11 +24,16 @@ class UsuariosController extends Controller
                 return redirect('/create')->with('error_2', 'usuario existente'); // mensaje error
 
             } else {
-                Usuarios::create([ // grada los datos
+                $usuario = Usuarios::create([ // grada los datos
 
                     'nombre' => $request->nombre,
                     'usuario' => $request->usuario,
-                    'clave' => $request->clave
+                    'clave' => $request->clave,
+                    'permiso_id' => '2'
+                ]);
+                Perusu::create([
+                    'usuario_id' => $usuario->usuario_id, // importante
+                    'permiso_id' => 2
                 ]);
             }
         return redirect('/login')->with('success', 'usuario creado');

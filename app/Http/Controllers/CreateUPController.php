@@ -24,7 +24,7 @@ class CreateUPController extends Controller
 
             CreateUP::create([ // grada los datos
                 'permiso_id' => $request->permiso,
-                'usuario_id' => $usuario->id,
+                'usuario_id' => $usuario->usuario_id,
             ]);
         }
         return redirect('/CreateUP')->with('success', 'usuario creado');

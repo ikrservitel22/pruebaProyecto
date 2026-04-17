@@ -1,4 +1,4 @@
-    <nav class="navbar navbar-expand-lg bg-dark">
+    <nav id="main-navbar" class="navbar navbar-expand-lg bg-dark" style="transition: margin-left .3s;">
         <div class="container-fluid">
             <a class="navbar-brand text-light" href="/">Home</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,11 @@
                 <button class="btn btn-outline-light" type="submit">Buscar</button>
             </form>
             </div>
-            <div class="ms-auto d-flex gap-2">
+            <div class="ms-auto d-flex gap-2 align-items-center">
+                <button class="btn btn-outline-light btn-sm" type="button" onclick="toggleSidebar()">
+                    Mostrar / ocultar menú
+                </button>
+
                 @hasSection('Button')
                     @yield('Button')
                 @endif
