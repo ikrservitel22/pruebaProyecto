@@ -10,43 +10,63 @@
 
     <div class="accordion" id="accordionExample">
 
-    @foreach($Usuarios as $Usuario)
-        <div class="accordion-item borer">
-            <h2 class="accordion-header">
-                <button 
-                    class="accordion-button collapsed" 
-                    type="button" 
-                    data-bs-toggle="collapse" 
-                    data-bs-target="#collapse{{ $loop->index }}" 
-                    aria-expanded="false"
-                >
-                    Usuario: {{ $Usuario->usuario }}
-                </button>
-            </h2>
-
-            <div 
-                id="collapse{{ $loop->index }}" 
-                class="accordion-collapse collapse"
-                data-bs-parent="#accordionExample"
-            >
-                <div class="accordion-body">
-                    <p><strong>Nombre:</strong> {{ $Usuario->nombre }}</p>
-                    <p><strong>Password:</strong> {{ $Usuario->clave }}</p>
-                    @if(session()->has('id'))
-                        @php
-                            $usuario = \App\Models\Usuarios::find(session('id'));
-                        @endphp
-
-                        @if($usuario && $usuario->permisos->contains('permiso_id', 1))
-                            <!-- CONTENIDO SOLO PARA USUARIOS CON PERMISO -->
-                            <a href="/CreateUP" class="btn btn-outline-light bg-danger">Borrar</a>
-                        @endif
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                @foreach($listas as $lista)
+                    <th scope="col" class="text-white border rounded">
+                        {{ $lista['nombre'] }}
+                    </th>   
+                @endforeach
+            </tr>
+        </thead>
+        <tbody class="table-light">
+            @foreach($Datos as $Dato)
+                <tr>
+                    <th scope="row">{{ $Dato->usuario_id }}</th>
+                    <td>{{ $Dato->nombre }}</td>
+                    <td>{{ $Dato->usuario }}</td>
+                    <td>{{ $Dato->clave }}</td>
+                    @if($Dato->permiso_id == 1)
+                        <td>Admin</td>
+                    @elseif($Dato->permiso_id == 2)
+                        <td>Read</td>
+                    @elseif($Dato->permiso_id == 3)
+                        <td>Read/Write</td>
+                    @else
+                        <td>Sin rol</td>
                     @endif
-                </div>
+                        <td>
+                            @if ($Dato->permiso_id == 1 || $Dato->permiso_id == 2 || $Dato->permiso_id == 3 || $Dato->permiso_id == 4)
+                                <a href="/" class="btn btn-outline-light bg-secondary border">
+                                    See
+                                </a>
+                            @endif
+                            @if ($Dato->permiso_id == 1 || $Dato->permiso_id == 3 || $Dato->permiso_id == 4)
+                                <a href="/" class="btn btn-outline-light bg-primary border">
+                                    Edit
+                                </a>
+                            @endif
+                            @if ($Dato->permiso_id == 1 || $Dato->permiso_id == 4)
+                                <button type="button" 
+                                    class="btn btn-danger"
+                                    onclick="confirmarEliminacion({{ $Dato->usuario_id }})">
+                                    Eliminar
+                                </button>
+                                <form id="formEliminar{{ $Dato->usuario_id }}" 
+                                    action="{{ route('Usuarios.destroy', $Dato->usuario_id) }}" 
+                                    method="POST" style="display:none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-            </div>
-        </div>
-    @endforeach
+    
 
     </div>
 

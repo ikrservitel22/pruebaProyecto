@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Usuarios;
+use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,8 +26,6 @@ class AppServiceProvider extends ServiceProvider
             $items = [
                 ['nombre' => 'Crear Nuevo Usuario', 'url' => '/CreateUP'],
                 ['nombre' => 'Lista De Usuarios', 'url' => '/lista'],
-                ['nombre' => 'Lista De Inputs', 'url' => '/inputtt'],
-                ['nombre' => 'Lista', 'url' => '/lista'],
             ];
     /*        if (session()->has('id')) {
                 $usuario = \App\Models\Usuarios::find(session('id'));
@@ -41,8 +40,28 @@ class AppServiceProvider extends ServiceProvider
                     'items' => $items
                 ]
             ];
+            $listas = [
+                ['nombre' => '#'],
+                ['nombre' => 'Name'],
+                ['nombre' => 'Username'],
+                ['nombre' => 'Password'],
+                ['nombre' => 'Rol'],
+                ['nombre' => 'Options'],
+            ];
+            $Datos = DB::table('registro') 
+                ->join('per_usu', 'registro.usuario_id', '=', 'per_usu.usuario_id')
+                ->select(
+                    'registro.usuario_id',
+                    'registro.usuario',
+                    'registro.nombre',
+                    'registro.clave',
+                    'per_usu.permiso_id'
+                )
+                ->get();
 
             $view->with('menu', $menu);
+            $view->with('listas', $listas);
+            $view->with('Datos', $Datos);  
         });
     }
 }

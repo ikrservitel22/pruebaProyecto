@@ -18,8 +18,10 @@
         @include('layouts.headerprv')
     @endif 
 
-    <div class="container mt-5 flex-fill flex-grow-1 p-4">
-        @yield('content')
+    <div id="content-wrapper" style="width: 100%; margin-left: 0; transition: margin-left .3s, width .3s;">
+        <div id="main-content" class="container mt-5 flex-fill flex-grow-1 p-4" style="max-width: 1080px; width: 100%; margin: 70px auto 0 auto;">
+            @yield('content')
+        </div>
     </div>
 
     @if(!isset($hideSidebar))
@@ -61,6 +63,22 @@
     </script>
     @endif
 
+    <script>
+        function confirmarEliminacion(id) {
+            Swal.fire({
+                title: '¿Eliminar usuario?',
+                text: 'No podrás revertir esto',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formEliminar' + id).submit();
+                }
+            });
+        }
+    </script>
+
     <style>
         .accordion-button {
             background-color: #3b4046;
@@ -96,18 +114,26 @@
     </style>
 
     <script>
-        let abierto = true;
+        let sidebarOpen = false;
 
         function toggleSidebar() {
             let sidebar = document.getElementById('sidebar');
+            let wrapper = document.getElementById('content-wrapper');
+            let navbar = document.getElementById('main-navbar');
 
-            if (abierto) {
-                sidebar.style.right = '-250px';
+            if (sidebarOpen) {
+                sidebar.style.transform = 'translateX(-100%)';
+                wrapper.style.width = '100%';
+                wrapper.style.marginLeft = '0';
+                navbar.style.marginLeft = '0';
             } else {
-                sidebar.style.right = '0';
+                sidebar.style.transform = 'translateX(0)';
+                wrapper.style.width = 'calc(100% - 250px)';
+                wrapper.style.marginLeft = '250px';
+                navbar.style.marginLeft = '250px';
             }
 
-            abierto = !abierto;
+            sidebarOpen = !sidebarOpen;
         }
     </script>
 </body>

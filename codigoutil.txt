@@ -1,0 +1,62 @@
+// lista desplegable
+
+@foreach($Usuarios as $Usuario)
+        <div class="accordion-item borer">
+            <h2 class="accordion-header">
+                <button 
+                    class="accordion-button collapsed" 
+                    type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#collapse{{ $loop->index }}" 
+                    aria-expanded="false"
+                >
+                    Usuario: {{ $Usuario->usuario }}
+                </button>
+            </h2>
+
+            <div 
+                id="collapse{{ $loop->index }}" 
+                class="accordion-collapse collapse"
+                data-bs-parent="#accordionExample"
+            >
+                <div class="accordion-body">
+                    <p><strong>Nombre:</strong> {{ $Usuario->nombre }}</p>
+                    <p><strong>Password:</strong> {{ $Usuario->clave }}</p>
+                    @if(session()->has('id'))
+                        @php
+                            $usuario = \App\Models\Usuarios::find(session('id'));
+                        @endphp
+
+
+
+                        @if($usuario && $usuario->permisos->contains('permiso_id', 2))
+                            <!-- CONTENIDO SOLO PARA USUARIOS CON PERMISO -->x  
+                            <form id="formEliminar{{ $usuario->id }}" action="delete" method="POST">
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="button" onclick="confirmarEliminacion({{ $Usuario->id }})" class="btn btn-danger">
+                                    Eliminar
+                                </button>
+                            </form>
+                        @endif
+                        @if($usuario && $usuario->permisos->contains('permiso_id', 1) || $usuario->permisos->contains('permiso_id', 2))
+                            <!-- CONTENIDO SOLO PARA USUARIOS CON PERMISO -->
+                            <a href="/CreateUP" class="btn btn-outline-light bg-primary">editar</a>
+                        @endif
+                    @endif
+                </div>
+
+            </div>
+        </div>
+    @endforeach
+
+
+// tabla de datos arreglo
+
+            // $Datos = [
+            //     ['nombre' => 'Crear Nuevo Usuario'],
+            //     ['nombre' => 'Lista De Usuarios'],
+            //     ['nombre' => 'Lista De Inputs'],
+            //     ['nombre' => 'Lista'],
+            // ];
