@@ -6,6 +6,11 @@ use App\Models\Usuarios;
 use App\Http\Middleware\CheckSession;
 use App\Http\Controllers\CreateUPController;
 use App\Http\Controllers\DeleteController;
+use App\Http\Controllers\UpdateController;
+use App\Http\Controllers\PermisosController;
+use App\Http\Controllers\PerusuController;
+use App\Http\Controllers\InactivateController;
+use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [UsuariosController::class, 'index']);
@@ -59,4 +64,11 @@ Route::get('/CreateUP', function () {
 Route::post('/CreateUP', [CreateUPController::class, 'CreateUP']);
 
 Route::delete('/usuarios/{id}', [DeleteController::class, 'destroy'])
-    ->name('usuarios.destroy');
+    ->name('Usuarios.destroy');
+
+Route::get('/Edit/{id}', [UpdateController::class, 'Edit'])->name('Usuarios.Edit');
+
+Route::put('/Update/{id}', [UpdateController::class, 'update'])->name('Usuarios.Update');
+
+Route::delete('/usuarios/{id}', [InactivateController::class, 'Softdelete'])
+    ->name('Usuarios.Softdelete');

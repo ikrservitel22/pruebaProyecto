@@ -50,13 +50,16 @@ class AppServiceProvider extends ServiceProvider
             ];
             $Datos = DB::table('registro') 
                 ->join('per_usu', 'registro.usuario_id', '=', 'per_usu.usuario_id')
+                ->join('permisos', 'per_usu.permiso_id', '=', 'permisos.permiso_id')
                 ->select(
                     'registro.usuario_id',
                     'registro.usuario',
                     'registro.nombre',
                     'registro.clave',
-                    'per_usu.permiso_id'
+                    'permisos.permisos as permiso_nombre' 
                 )
+                ->where('registro.state', 1) // SOLO ACTIVOS
+                ->orderBy('registro.usuario_id', 'asc')  //ordenar por id
                 ->get();
 
             $view->with('menu', $menu);

@@ -62,6 +62,17 @@
         });
     </script>
     @endif
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: '{{ session('success') }}'
+            }).then(() => {
+                window.location.reload();
+            });
+        </script>
+    @endif
 
     <script>
         function confirmarEliminacion(id) {

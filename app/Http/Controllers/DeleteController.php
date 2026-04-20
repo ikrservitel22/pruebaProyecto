@@ -13,7 +13,6 @@ class DeleteController extends Controller
         $usuario = Usuarios::findOrFail($id);
         $usuario->delete();
 
-        return redirect()->route('Usuarios.lista')->with('success', 'Usuario eliminado');
-
+        return redirect('/lista')->with('success', 'Usuario eliminado');
     }
 }

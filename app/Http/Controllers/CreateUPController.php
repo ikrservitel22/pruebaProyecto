@@ -19,7 +19,8 @@ class CreateUPController extends Controller
             $usuario = Usuarios::create([
                 'nombre' => $request->nombre,
                 'usuario' => $request->usuario,
-                'clave' => $request->clave
+                'clave' => $request->clave,
+                'state' => true,
             ]);
 
             CreateUP::create([ // grada los datos

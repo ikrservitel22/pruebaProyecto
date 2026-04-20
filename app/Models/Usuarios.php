@@ -12,6 +12,7 @@ class Usuarios extends Model
         'usuario',
         'clave',
         'nombre',
+        'state'
     ];
     public function permisos()
     {

@@ -29,6 +29,7 @@ class UsuariosController extends Controller
                     'nombre' => $request->nombre,
                     'usuario' => $request->usuario,
                     'clave' => $request->clave,
+                    'state' => true,
                     'permiso_id' => '2'
                 ]);
                 Perusu::create([
@@ -46,13 +47,14 @@ class UsuariosController extends Controller
                     ->first();
         if ($user) {
                     // BUSCAR PERMISO EN TABLA INTERMEDIA
-            $permiso = CreateUP::where('usuario_id', $user->id)
+            $permiso = CreateUP::where('usuario_id', $user->usuario_id)
                                 ->value('permiso_id');
             session([
                 'usuario' => $user->usuario, //guardo el usuario 
                 'id' => $user->usuario_id,
                 'permiso_id' => $permiso
             ]);
+            
             return redirect('/')->with('success', 'Sesión iniciada correctamente'); // sí existe
         } else {
             return redirect('/login')->with('error', 'Usuario o clave incorrectos'); // da error
