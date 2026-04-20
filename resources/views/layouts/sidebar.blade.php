@@ -5,11 +5,11 @@
     </div>
 
     @if(session()->has('usuario'))
-        @foreach($menu as $grupo)
+        @foreach($menu as $seccion)
             <div class="mb-3">
-                <h6 class="text-uppercase text-white small mb-2 ">{{ $grupo['titulo'] }}</h6>
+                <h6 class="text-uppercase text-white small mb-2 ">{{ $seccion['titulo'] }}</h6>
                 <div class="list-group list-group-flush">
-                    @foreach($grupo['items'] as $item)
+                    @foreach($seccion['items'] as $item)
                         <a href="{{ $item['url'] }}" class="list-group-item list-group-item-action bg-secondary text-white-50 border-secondary">
                             {{ $item['nombre'] }}
                         </a>

@@ -38,7 +38,14 @@ class AppServiceProvider extends ServiceProvider
                 [
                     'titulo' => 'Usuarios',
                     'items' => $items
-                ]
+                ],
+                // [
+                //     'titulo' => 'Otros', // ejemplo de otra sección
+                //     'items' => [  // ejemplo de otros items
+                //         ['nombre' => 'Home', 'url' => '/home'], // ejemplo de item
+                //         ['nombre' => 'Profile', 'url' => '/profile'],
+                //     ]
+                // ]
             ];
             $listas = [
                 ['nombre' => '#'],
