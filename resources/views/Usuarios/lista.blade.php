@@ -5,69 +5,69 @@
 @endsection
 
 @section('content')
-
-    <h1 class="text-muted text-center fw-bold">Listado</h1>
-
-    <div class="accordion" id="accordionExample">
-
-    <table class="table table-dark">
-        <thead>
-            <tr>
-                @foreach($listas as $lista)
-                    <th scope="col" class="text-white border rounded">
-                        {{ $lista['nombre'] }}
-                    </th>   
-                @endforeach
-            </tr>
-        </thead>
-        <tbody class="table-light">
-            @foreach($Datos as $Dato)
-                <tr>
-                    <th scope="row">{{ $Dato->usuario_id }}</th>
-                    <td>{{ $Dato->nombre }}</td>
-                    <td>{{ $Dato->usuario }}</td>
-                    <td>{{ $Dato->clave }}</td>
-                    @if($Dato->permiso_id == 1)
-                        <td>Admin</td>
-                    @elseif($Dato->permiso_id == 2)
-                        <td>Read</td>
-                    @elseif($Dato->permiso_id == 3)
-                        <td>Read/Write</td>
-                    @else
-                        <td>Sin rol</td>
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2>Listade Usuarios</h2>
+                    </div>
+                    @if (session('permiso_id') == 1 || session('permiso_id') == 3 || session('permiso_id') == 4)
+                        <div class="col-sm-4 text-end">
+                            <a href="/CreateUP" class="btn btn-info">
+                                <i class="fa fa-plus"></i> Nuevo Usuario
+                            </a>
+                        </div>
                     @endif
-                        <td>
-                            @if ($Dato->permiso_id == 1 || $Dato->permiso_id == 2 || $Dato->permiso_id == 3 || $Dato->permiso_id == 4)
-                                <a href="/" class="btn btn-outline-light bg-secondary border">
-                                    See
-                                </a>
-                            @endif
-                            @if ($Dato->permiso_id == 1 || $Dato->permiso_id == 3 || $Dato->permiso_id == 4)
-                                <a href="/" class="btn btn-outline-light bg-primary border">
-                                    Edit
-                                </a>
-                            @endif
-                            @if ($Dato->permiso_id == 1 || $Dato->permiso_id == 4)
-                                <button type="button" 
-                                    class="btn btn-danger"
-                                    onclick="confirmarEliminacion({{ $Dato->usuario_id }})">
-                                    Eliminar
-                                </button>
-                                <form id="formEliminar{{ $Dato->usuario_id }}" 
-                                    action="{{ route('Usuarios.destroy', $Dato->usuario_id) }}" 
-                                    method="POST" style="display:none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            @endif
-                        </td>
+                </div>
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        @foreach($listas as $lista)
+                            <th>{{ $lista['nombre'] }}</th>
+                        @endforeach
                     </tr>
-            @endforeach
-        </tbody>
-    </table>
+                </thead>
 
-    
+                <tbody>
+                    @foreach($Datos as $Dato)
+                        <tr>
+                            <td>{{ $Dato->usuario_id }}</td>
+                            <td>{{ $Dato->nombre }}</td> 
+                            <td>{{ $Dato->usuario }}</td> 
+                            <td>{{ $Dato->clave }}</td> 
+                            <td>{{ $Dato->permiso_nombre }}</td>
+                            <td>
+                                @if (session('permiso_id') == 1 || session('permiso_id') == 4 )
+                                        <button type="button" 
+                                            class="btn btn-danger"
+                                            onclick="confirmarEliminacion({{ $Dato->usuario_id }})">
+                                            Delete
+                                        </button>
 
+                                        <form id="formEliminar{{ $Dato->usuario_id }}" 
+                                            action="{{ route('Usuarios.Softdelete', $Dato->usuario_id) }}" 
+                                            method="POST" style="display:none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                @endif
+                                @if (session('permiso_id') == 1 || session('permiso_id') == 3 || session('permiso_id') == 4)
+                                    <a href="{{ route('Usuarios.Edit', $Dato->usuario_id) }}" class="btn btn-success">
+                                        Edit
+                                    </a>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+
+                </tbody>
+
+            </table>
+        </div>
     </div>
-
+</div>
 @endsection
