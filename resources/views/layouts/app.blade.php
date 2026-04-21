@@ -91,6 +91,19 @@
     </script>
 
     <style>
+        .bg-perso {
+            background-color: #6969a4;
+        }
+        tbody tr {
+            height: 25px;
+        }
+        .table {
+            font-size: 12px;
+        }
+
+        .table td, .table th {
+            padding: 4px !important;
+        }
         .accordion-button {
             background-color: #3b4046;
             color: white;

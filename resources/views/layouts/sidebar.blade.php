@@ -4,7 +4,6 @@
         <small class="text-muted">CRUD y sesión</small>
     </div>
 
-    @if(session()->has('usuario'))
         @foreach($menu as $seccion)
             <div class="mb-3">
                 <h6 class="text-uppercase text-white small mb-2 ">{{ $seccion['titulo'] }}</h6>
@@ -21,9 +20,4 @@
         <div class="mt-auto pt-3 border-top border-secondary">
             <a href="/logout" class="btn btn-secondary w-100">Cerrar sesión</a>
         </div>
-    @else
-        <div class="alert alert-secondary py-3 mt-3">
-            Inicia sesión para acceder al menú CRUD.
-        </div>
-    @endif
 </div>

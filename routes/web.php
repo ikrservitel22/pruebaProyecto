@@ -11,6 +11,7 @@ use App\Http\Controllers\PermisosController;
 use App\Http\Controllers\PerusuController;
 use App\Http\Controllers\InactivateController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HorarioController;
 
 
 Route::get('/', [UsuariosController::class, 'index']);
@@ -55,6 +56,13 @@ Route::get('/buscar', function () {
 Route::middleware(['check.session'])->group(function () {
     Route::get('/lista', [UsuariosController::class, 'lista']);
     Route::get('/inputtt', [UsuariosController::class, 'inputtt']);
+    Route::get('/CreateUP', [UsuariosController::class, 'CreateUP']);
+    Route::get('/Horario', [HorarioController::class, 'Horario']);
+    Route::post('/Horario', [HorarioController::class, 'Horario']);
+    Route::post('/Evento', [HorarioController::class, 'store'])->name('Usuarios.eventoN');
+    Route::get('/Evento', [HorarioController::class, 'create']);
+    Route::put('/Evento /{id}', [HorarioController::class, 'update'])->name('evento.update');
+    Route::get('/Evento/{id}/Edit', [HorarioController::class, 'edit'])->name('Usuarios.editE');
 });
 
 Route::get('/CreateUP', function () {
@@ -72,3 +80,16 @@ Route::put('/Update/{id}', [UpdateController::class, 'update'])->name('Usuarios.
 
 Route::delete('/usuarios/{id}', [InactivateController::class, 'Softdelete'])
     ->name('Usuarios.Softdelete');
+
+Route::get('/Horario', [HorarioController::class, 'Horario'])->name('Usuarios.horario');
+
+Route::post('/Horario', [HorarioController::class, 'Horario']);
+
+Route::post('/Evento', [HorarioController::class, 'store'])->name('Usuarios.eventoN');
+
+Route::get('/Evento', [HorarioController::class, 'create']);
+
+Route::put('/Evento /{id}', [HorarioController::class, 'update'])->name('evento.update');
+
+Route::get('/Evento/{id}/Edit', [HorarioController::class, 'edit'])
+    ->name('Usuarios.editE');

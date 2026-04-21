@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('Button')
-    <a href="/lista" class="btn border btn-dark">Exit</a>
+    <button onclick="history.back()" class="btn border btn-dark">Volver</button>
 @endsection
 
 @section('content')
