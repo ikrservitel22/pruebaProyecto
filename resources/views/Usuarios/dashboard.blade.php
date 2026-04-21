@@ -34,7 +34,7 @@
     <!-- GRAFICAS -->
     <div class="row">
         <div class="col-md-6">
-            <div class="card bg-dark text-white p-3">
+            <div class="card bg-secondary text-dark p-3">
                 <h5>Eventos por día</h5>
                 <canvas id="grafica1"></canvas>
             </div>
@@ -89,7 +89,7 @@ new Chart(ctx1, {
         plugins: {
             legend: {
                 labels: {
-                    color: 'white'
+                    color: '#ffffff'
                 }
             },
             title: {
@@ -115,7 +115,7 @@ new Chart(ctx1, {
                     color: 'white'
                 },
                 grid: {
-                    color: 'rgba(255,255,255,0.1)'
+                    color: 'rgba(255, 0, 0, 0.86)'
                 }
             },
             y: {
@@ -124,7 +124,7 @@ new Chart(ctx1, {
                     color: 'white'
                 },
                 grid: {
-                    color: 'rgba(255,255,255,0.1)'
+                    color: 'rgba(21, 255, 0, 0.76)'
                 }
             }
         }
@@ -139,8 +139,56 @@ new Chart(ctx2, {
     data: {
         labels: ['Reunión', 'Clase', 'Otro'],
         datasets: [{
-            data: [60, 60, 60]
+            data: [60, 40, 100],
+
+            // 🎨 colores de cada sección
+            backgroundColor: [
+                '#ff3700',
+                '#00ffdd',
+                '#ee00ff'
+            ],
+
+            // borde entre secciones
+            borderColor: '#000000',
+            borderWidth: 5
         }]
+    },
+
+    options: {
+        responsive: true,
+
+        plugins: {
+            legend: {
+                position: 'left',
+                labels: {
+                    color: '#00ffee',
+                    font: {
+                        size: 25
+                    }
+                }
+            },
+
+            title: {
+                display: true,
+                text: 'Tipos de eventos',
+                color: 'white',
+                font: {
+                    size: 18
+                }
+            },
+
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        let valor = context.raw;
+                        let porcentaje = ((valor / total) * 100).toFixed(1);
+
+                        return `${context.label}: ${valor} (${porcentaje}%)`;
+                    }
+                }
+            }
+        }
     }
 });
 </script>
