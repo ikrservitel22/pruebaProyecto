@@ -13,6 +13,7 @@ use App\Http\Controllers\InactivateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HorarioController;
 
+Route::view('/test', 'Usuarios.dashboard');
 
 Route::get('/', [UsuariosController::class, 'index']);
 
