@@ -4,8 +4,8 @@
     $hideSidebar = false;// oculta el sidebar
 @endphp
 
-@section('Button') {{-- muestra el boton solo en esta vista--}}
-    <a href="/" class="btn border btn-dark">Exit</a>
+@section('Button')
+    <button onclick="history.back()" class="btn border btn-dark">Volver</button>
 @endsection
 
 

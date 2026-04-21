@@ -1,10 +1,8 @@
 @extends('layouts.app')
 
-@if(session()->has('usuario'))
-    @section('Button') {{-- muestra el boton solo en esta vista--}}
-        <a href="/logout" class="btn btn-outline-light">Cerrar Sesión</a>
-    @endsection
-@endif
+@section('Button')
+    <button onclick="history.back()" class="btn border btn-dark">Volver</button>
+@endsection
 
 @section('content')
 

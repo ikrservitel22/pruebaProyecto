@@ -24,9 +24,13 @@ class AppServiceProvider extends ServiceProvider
     {
         View::composer('*', function ($view) {
             $items = [
-                ['nombre' => 'Crear Nuevo Usuario', 'url' => '/CreateUP'],
-                ['nombre' => 'Lista De Usuarios', 'url' => '/lista'],
+                ['nombre' => 'Inicio', 'url' => '/'],
             ];
+            if (session('permiso_id') == 1) { // si el permiso es admin
+                    $items[] = ['nombre' => 'Input List', 'url' => '/inputtt'];
+                    $items[] = ['nombre' => 'youtube', 'url' => 'https://www.youtube.com/watch?v=LbwZCALNfb8&list=RDLbwZCALNfb8&start_radio=1'];
+                    $items[] = ['nombre' => 'Crear Nuevo Usuario', 'url' => '/CreateUP'];
+            }
     /*        if (session()->has('id')) {
                 $usuario = \App\Models\Usuarios::find(session('id'));
 
@@ -38,8 +42,18 @@ class AppServiceProvider extends ServiceProvider
                 [
                     'titulo' => 'Usuarios',
                     'items' => $items
-                ]
+                ],
             ];
+            if (session('permiso_id') == 1 || session('permiso_id') == 4 || session('permiso_id') == 2 || session('permiso_id') == 3) {
+                $menu[] = [
+                    'titulo' => 'Utilidades',
+                    'items' => [
+                        ['nombre' => 'Horario', 'url' => '/Horario'],
+                        ['nombre' => 'Lista De Usuarios', 'url' => '/lista'],
+                    ]
+                ];
+
+            }
             $listas = [
                 ['nombre' => '#'],
                 ['nombre' => 'Name'],
