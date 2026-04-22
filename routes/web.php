@@ -12,8 +12,10 @@ use App\Http\Controllers\PerusuController;
 use App\Http\Controllers\InactivateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FestivosController;
 
-Route::view('/test', 'Usuarios.dashboard');
+Route::get('/test', [FestivosController::class, 'festivo']);
 
 Route::get('/', [UsuariosController::class, 'index']);
 
@@ -94,3 +96,7 @@ Route::put('/Evento /{id}', [HorarioController::class, 'update'])->name('evento.
 
 Route::get('/Evento/{id}/Edit', [HorarioController::class, 'edit'])
     ->name('Usuarios.editE');
+
+Route::post('/Festivos/update', [FestivosController::class, 'update']);
+
+Route::get('/Festivos', [FestivosController::class, 'festivo']);

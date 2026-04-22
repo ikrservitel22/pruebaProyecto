@@ -94,7 +94,7 @@
 
     <style>
         .bg-perso {
-            background-color: #6969a4;
+            background-color: #c3bcda!important;
         }
         tbody tr {
             height: 25px;

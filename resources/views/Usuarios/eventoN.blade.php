@@ -9,6 +9,15 @@
     <h1 class="text-muted text-center fw-bold">CREAR EVENTO</h1>
     <form method="POST" action="{{ route('Usuarios.eventoN') }}" class="p-4 border rounded bg-dark">
         @csrf
+        <div class="mb-3">
+            <label>Frecuencia de asignación</label>
+            <select name="frecuencia" class="form-control" required>
+                <option value="unico">Solo este día ({{ $fecha ?? 'seleccionado' }})</option>
+                <option value="par">Todos los días PARES del mes</option>
+                <option value="impar">Todos los días IMPARES del mes</option>
+            </select>
+            <small class="text-muted">Esto aplicará el horario según el número del día (2, 4, 6... o 1, 3, 5...).</small>
+        </div>
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label class="form-label">Tipo</label>
