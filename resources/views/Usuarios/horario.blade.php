@@ -254,9 +254,9 @@
 
     <!-- Contenedor del calendario -->
     <div id="calendar">
-        <a href="/exportar-horarios" class="btn btn-calendar-create mt-4 border">
+        <button id="btnDescargarCSV" class="btn btn-calendar-create mt-4 border">
             Descargar CSV
-        </a><br>
+        </button><br>
         <form action="{{ route('horarios.importar') }}" method="POST" enctype="multipart/form-data" class="ms-2 ">
             @csrf
             <div class="mb-2">
@@ -403,6 +403,17 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
 <script>
+    document.getElementById('btnDescargarCSV').addEventListener('click', function () {
+        const calendar = window.calendarInstance;
+
+        const fecha = calendar.getDate(); // fecha actual del calendario
+
+        const mes = fecha.getMonth() + 1; // 1-12
+        const anio = fecha.getFullYear();
+
+        window.location.href = `/exportar-horarios?mes=${mes}&anio=${anio}`;
+    });
+
     console.log('CALENDAR INIT');
     // Datos disponibles para el calendario
     window.eventos = @json($horariosFormateados);

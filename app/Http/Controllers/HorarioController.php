@@ -285,9 +285,13 @@ class HorarioController extends Controller
         }
     }
 
-    public function exportarCSV()
+    public function exportarCSV(Request $request)
     {
-    $nombreArchivo = "horarios.csv";
+    $mesNumero = $request->mes ?? date('m');
+
+    $anio = $request->anio ?? date('Y');
+
+    $nombreArchivo = "horarios_$mesNumero-$anio.csv";
 
     $headers = [
         "Content-type" => "text/csv",
@@ -296,9 +300,6 @@ class HorarioController extends Controller
         "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
         "Expires" => "0"
     ];
-
-    $callback = function() {
-        $file = fopen('php://output', 'w');
 
     $meses = [
         'January' => 'Enero',
@@ -315,15 +316,18 @@ class HorarioController extends Controller
         'December' => 'Diciembre'
     ];
 
-    $mes = $meses[date('F')];
+    $fecha = \Carbon\Carbon::createFromDate($anio, $mesNumero, 1);
 
-        $diasMes = date('t'); 
+    $mes = $meses[$fecha->format('F')];
 
+    $diasMes = $fecha->daysInMonth;
 
+    $callback = function() use ($mes, $diasMes) {
+        $file = fopen('php://output', 'w');
 
         // Encabezados
         $encabezados = [
-            'usuario_id',
+            'cedula',
             'horario/día',
             $mes
             ];
@@ -359,7 +363,6 @@ class HorarioController extends Controller
 
         fclose($file);
     };
-
         return response()->stream($callback, 200, $headers);
     }
 
@@ -376,6 +379,27 @@ class HorarioController extends Controller
         // 1. Encabezados
         $header = fgetcsv($handle);
 
+        $mesTexto = ucfirst(strtolower(trim($header[2])));
+
+        $anio = date('Y');
+
+        $meses = [
+            'Enero' => '01',
+            'Febrero' => '02',
+            'Marzo' => '03',
+            'Abril' => '04',
+            'Mayo' => '05',
+            'Junio' => '06',
+            'Julio' => '07',
+            'Agosto' => '08',
+            'Septiembre' => '09',
+            'Octubre' => '10',
+            'Noviembre' => '11',
+            'Diciembre' => '12'
+        ];
+
+        $mesNumero = $meses[$mesTexto] ?? date('m');
+
         // 2. Leer TODAS las filas
         $filas = [];
 
@@ -387,12 +411,19 @@ class HorarioController extends Controller
             return back()->with('error', 'El CSV está vacío');
         }
 
-        // 3. SACAR usuario_id SOLO de la primera fila
-        $usuario_id = trim($filas[0][0]);
+        // 3. SACAR cedula SOLO de la primera fila
+        $cedula = trim($filas[0][0]);
 
-        if (!$usuario_id) {
-            return back()->with('error', 'Debe colocar el usuario_id en A2');
+        $usuario = DB::table('registro')
+            ->where('cedula', $cedula)
+            ->first();
+
+
+        if (!$usuario) {
+            return back()->with('error', 'Debe colocar la cedula en A2');
         }
+
+        $usuario_id = $usuario->usuario_id;
 
         foreach ($filas as $row) {
 
@@ -411,7 +442,7 @@ class HorarioController extends Controller
 
                     $dia = $header[$i];
 
-                    $fecha = date('Y-m-') . str_pad($dia, 2, '0', STR_PAD_LEFT);
+                    $fecha = $anio . '-' . $mesNumero . '-' . str_pad($dia, 2, '0', STR_PAD_LEFT);
 
                     DB::table('horarios')->insert([
                         'usuario_id' => $usuario_id,
