@@ -9,8 +9,8 @@ class DashboardController extends Controller
 {
     public function dash()
     {
-        // Obtener eventos por día (1=Domingo, 2=Lunes...)
-        $eventosPorDia = DB::table('horarios')
+        // Obtener horarios por día (1=Domingo, 2=Lunes...)
+        $hoariossPorDia = DB::table('horarios')
             ->selectRaw('DAYOFWEEK(fecha) as dia, COUNT(*) as total')
             ->groupBy('dia')
             ->pluck('total', 'dia');
@@ -31,7 +31,7 @@ class DashboardController extends Controller
 
         foreach ($diasOrdenados as $numero => $nombre) {
             $labels[] = $nombre;
-            $data[] = $eventosPorDia[$numero] ?? 0;
+            $data[] = $hoariossPorDia[$numero] ?? 0;
         }
 
         return view('Usuarios.dashboard', compact('labels', 'data'));

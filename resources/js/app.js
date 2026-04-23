@@ -27,22 +27,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 let evento = info.event;
 
-                document.getElementById('evento_id').value = evento.id;
-                document.getElementById('evento_descripcion').value = evento.title;
+                document.getElementById('horario_id').value = evento.id;
+                document.getElementById('horario_descripcion').value = evento.title;
 
                 let start = evento.start;
                 let end = evento.end;
 
-                document.getElementById('evento_fecha').value = start.toISOString().split('T')[0];
-                document.getElementById('evento_inicio').value = start.toTimeString().slice(0,5);
+                document.getElementById('horario_fecha').value = start.toISOString().split('T')[0];
+                document.getElementById('horario_inicio').value = start.toTimeString().slice(0,5);
 
                 if (end) {
-                    document.getElementById('evento_fin').value = end.toTimeString().slice(0,5);
+                    document.getElementById('horario_fin').value = end.toTimeString().slice(0,5);
                 }
 
-                document.getElementById('formEditarEvento').action = `/Horario/update/${evento.id}`;
+                document.getElementById('formEditarHorario').action = `/Horario/update/${evento.id}`;
 
-                let modal = new bootstrap.Modal(document.getElementById('modalEditarEvento'));
+                let modal = new bootstrap.Modal(document.getElementById('modalEditarHorario'));
                 modal.show();
             }
 

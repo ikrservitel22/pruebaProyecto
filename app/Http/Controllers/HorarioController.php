@@ -10,58 +10,44 @@ class HorarioController extends Controller
 {
     public function Horario(Request $request)
     {
-        
-        $fecha = $request->fecha // 1. Fecha seleccionada o actual
-            ? Carbon::parse($request->fecha) 
-            : now();
-
-        $inicioSemana = $fecha->copy()->startOfWeek(); // lunes
-        $finSemana = $inicioSemana->copy()->addDays(6); // domingo
-        
-        $eventos = DB::table('horarios')
+        // Obtener TODOS los horarios para mostrar en el calendario
+        $horarios = DB::table('horarios')
             ->join('registro', 'horarios.usuario_id', '=', 'registro.usuario_id')
             ->select(
                 'horarios.*',
                 'registro.usuario as usuario_nombre'
             )
-            ->whereBetween('fecha', [
-                $inicioSemana->format('Y-m-d'),
-                $finSemana->format('Y-m-d')
-            ])
             ->get();
 
         $usuarios = DB::table('registro')->get();
-        // Días
-        $dias = [];
-        for ($i = 0; $i < 7; $i++) {
-            $dia = $inicioSemana->copy()->addDays($i);
 
-            $dias[] = [
-                'nombre' => $dia->locale('es')->isoFormat('ddd'), // lun, mar...
-                'numero' => $dia->day,
-                'fecha' => $dia->toDateString()
-            ];
-        }
-        // Horas (1 a 24)
-        $horas = [];
-        for ($h = 0; $h <= 24; $h++) {
-            $horas[] = $h;
-        }
-
-        $eventosFormateados = $eventos->map(function($e) {
+        $horariosFormateados = $horarios->map(function($e) {
             return [
-                'title' => $e->descripcion,
+                'id' => $e->horario_id,
+                'title' => $e->descripcion . ' (' . $e->usuario_nombre . ')',
                 'start' => $e->fecha . 'T' . $e->hora_inicio,
                 'end'   => $e->fecha . 'T' . $e->hora_fin,
+                'usuario_id' => $e->usuario_id,
+                'usuario_nombre' => $e->usuario_nombre,
+                'extendedProps' => [
+                    'usuario_id' => $e->usuario_id,
+                    'usuario_nombre' => $e->usuario_nombre,
+                    'descripcion' => $e->descripcion,
+                    'horario_id' => $e->horario_id,
+                ]
             ];
         });
+
+        // Variables para compatibilidad (si las necesitas en la vista)
+        $dias = [];
+        $horas = [];
 
         return view('Usuarios.horario', compact(
             'dias',
             'horas',
-            'eventos',
+            'horarios',
             'usuarios',
-            'eventosFormateados'
+            'horariosFormateados'
         ));
     }
 
@@ -224,25 +210,225 @@ class HorarioController extends Controller
     }
     public function edit($id)
     {
-        $evento = DB::table('horarios')->where('horario_id', $id)->first();
+        $horario = DB::table('horarios')->where('horario_id', $id)->first();
         $usuarios = DB::table('registro')->get();
 
-        return view('Usuarios.editE', compact('evento', 'usuarios'));
+        return view('Usuarios.editE', compact('horario', 'usuarios'));
     }
     public function update(Request $request, $id)
     {
-        DB::table('horarios')
-            ->where('horario_id', $id)
-            ->update([
-                'usuario_id' => $request->usuario_id,
-                'fecha' => $request->fecha,
-                'hora_inicio' => $request->hora_inicio,
-                'hora_fin' => $request->hora_fin,
-                'descripcion' => $request->descripcion,
-            ]);
+        try {
+            $horario = DB::table('horarios')->where('horario_id', $id)->first();
+            
+            if (!$horario) {
+                return response()->json(['error' => 'Horario no encontrado'], 404);
+            }
 
-        return redirect('/Horario')->with('success', 'Evento actualizado');
+            $updateData = [];
+            
+            // Solo actualizar los campos que se envíen
+            if ($request->has('usuario_id')) {
+                $updateData['usuario_id'] = $request->usuario_id;
+            }
+            if ($request->has('fecha')) {
+                $updateData['fecha'] = $request->fecha;
+            }
+            if ($request->has('hora_inicio')) {
+                $updateData['hora_inicio'] = $request->hora_inicio;
+            }
+            if ($request->has('hora_fin')) {
+                $updateData['hora_fin'] = $request->hora_fin;
+            }
+            if ($request->has('descripcion')) {
+                $updateData['descripcion'] = $request->descripcion;
+            }
+            
+            if (!empty($updateData)) {
+                $updateData['updated_at'] = now();
+                DB::table('horarios')
+                    ->where('horario_id', $id)
+                    ->update($updateData);
+            }
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'message' => 'Horario actualizado'], 200);
+            }
+
+            return redirect('/Horario')->with('success', 'Horario actualizado');
+        } catch (\Exception $e) {
+            \Log::error('Error al actualizar horario: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
+    public function destroy($id)
+    {
+        try {
+            $horario = DB::table('horarios')->where('horario_id', $id)->first();
+            
+            if (!$horario) {
+                return response()->json(['error' => 'Horario no encontrado'], 404);
+            }
+
+            DB::table('horarios')
+                ->where('horario_id', $id)
+                ->delete();
+
+            if (request()->expectsJson()) {
+                return response()->json(['success' => true, 'message' => 'Horario eliminado'], 200);
+            }
+
+            return redirect('/Horario')->with('success', 'Horario eliminado');
+        } catch (\Exception $e) {
+            \Log::error('Error al eliminar horario: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function exportarCSV()
+    {
+    $nombreArchivo = "horarios.csv";
+
+    $headers = [
+        "Content-type" => "text/csv",
+        "Content-Disposition" => "attachment; filename=$nombreArchivo",
+        "Pragma" => "no-cache",
+        "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+        "Expires" => "0"
+    ];
+
+    $callback = function() {
+        $file = fopen('php://output', 'w');
+
+    $meses = [
+        'January' => 'Enero',
+        'February' => 'Febrero',
+        'March' => 'Marzo',
+        'April' => 'Abril',
+        'May' => 'Mayo',
+        'June' => 'Junio',
+        'July' => 'Julio',
+        'August' => 'Agosto',
+        'September' => 'Septiembre',
+        'October' => 'Octubre',
+        'November' => 'Noviembre',
+        'December' => 'Diciembre'
+    ];
+
+    $mes = $meses[date('F')];
+
+        $diasMes = date('t'); 
+
+
+
+        // Encabezados
+        $encabezados = [
+            'usuario_id',
+            'horario/día',
+            $mes
+            ];
+
+        for ($i = 1; $i <= $diasMes; $i++) {
+            $encabezados[] = $i;
+        }
+
+        
+
+        fputcsv($file, $encabezados);
+
+        // Horarios (filas)
+        $horarios = [
+            '06:00-16:00',
+            '08:00-18:00',
+            '10:00-20:00',
+            '12:00-22:00'
+        ];
+
+        foreach ($horarios as $h) {
+            $fila = [
+                ' ',
+                $h
+                ];
+
+            for ($i = 1; $i <= $diasMes; $i++) {
+                $fila[] = '';
+            }
+
+            fputcsv($file, $fila);
+        }
+
+        fclose($file);
+    };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function importarCSV(Request $request)
+    {
+        $file = $request->file('archivo');
+
+        if (!$file) {
+            return back()->with('error', 'No se subió ningún archivo');
+        }
+
+        $handle = fopen($file->getRealPath(), 'r');
+
+        // 1. Encabezados
+        $header = fgetcsv($handle);
+
+        // 2. Leer TODAS las filas
+        $filas = [];
+
+        while (($row = fgetcsv($handle)) !== false) {
+            $filas[] = $row;
+        }
+
+        if (count($filas) == 0) {
+            return back()->with('error', 'El CSV está vacío');
+        }
+
+        // 3. SACAR usuario_id SOLO de la primera fila
+        $usuario_id = trim($filas[0][0]);
+
+        if (!$usuario_id) {
+            return back()->with('error', 'Debe colocar el usuario_id en A2');
+        }
+
+        foreach ($filas as $row) {
+
+            $horarioTexto = trim($row[1]);
+
+            if (!$horarioTexto) continue;
+
+            // Descripción por defecto (como querías)
+            $descripcion = 'Trabajo';
+
+            [$hora_inicio, $hora_fin] = explode('-', $horarioTexto);
+
+            for ($i = 3; $i < count($row); $i++) {
+
+                if (strtoupper(trim($row[$i])) === 'X') {
+
+                    $dia = $header[$i];
+
+                    $fecha = date('Y-m-') . str_pad($dia, 2, '0', STR_PAD_LEFT);
+
+                    DB::table('horarios')->insert([
+                        'usuario_id' => $usuario_id,
+                        'descripcion' => $descripcion,
+                        'fecha' => $fecha,
+                        'hora_inicio' => $hora_inicio,
+                        'hora_fin' => $hora_fin,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+                }
+            }
+        }
+
+        fclose($handle);
+
+        return back()->with('success', 'Horarios importados correctamente');
+    }
 
 }

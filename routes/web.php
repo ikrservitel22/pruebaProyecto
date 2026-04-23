@@ -60,11 +60,16 @@ Route::middleware(['check.session'])->group(function () {
     Route::get('/lista', [UsuariosController::class, 'lista']);
     Route::get('/inputtt', [UsuariosController::class, 'inputtt']);
     Route::get('/CreateUP', [UsuariosController::class, 'CreateUP']);
-    Route::get('/Horario', [HorarioController::class, 'Horario']);
+    
+    // Rutas para Horarios
+    Route::get('/Horario', [HorarioController::class, 'Horario'])->name('Usuarios.horario');
     Route::post('/Horario', [HorarioController::class, 'Horario']);
+    
+    // Rutas para Eventos
     Route::post('/Evento', [HorarioController::class, 'store'])->name('Usuarios.eventoN');
     Route::get('/Evento', [HorarioController::class, 'create']);
-    Route::put('/Evento /{id}', [HorarioController::class, 'update'])->name('evento.update');
+    Route::put('/Evento/{id}', [HorarioController::class, 'update'])->name('evento.update');
+    Route::delete('/Evento/{id}', [HorarioController::class, 'destroy'])->name('evento.destroy');
     Route::get('/Evento/{id}/Edit', [HorarioController::class, 'edit'])->name('Usuarios.editE');
 });
 
@@ -84,19 +89,10 @@ Route::put('/Update/{id}', [UpdateController::class, 'update'])->name('Usuarios.
 Route::delete('/usuarios/{id}', [InactivateController::class, 'Softdelete'])
     ->name('Usuarios.Softdelete');
 
-Route::get('/Horario', [HorarioController::class, 'Horario'])->name('Usuarios.horario');
-
-Route::post('/Horario', [HorarioController::class, 'Horario']);
-
-Route::post('/Evento', [HorarioController::class, 'store'])->name('Usuarios.eventoN');
-
-Route::get('/Evento', [HorarioController::class, 'create']);
-
-Route::put('/Evento /{id}', [HorarioController::class, 'update'])->name('evento.update');
-
-Route::get('/Evento/{id}/Edit', [HorarioController::class, 'edit'])
-    ->name('Usuarios.editE');
-
 Route::post('/Festivos/update', [FestivosController::class, 'update']);
 
 Route::get('/Festivos', [FestivosController::class, 'festivo']);
+
+Route::get('/exportar-horarios', [HorarioController::class, 'exportarCSV']);
+
+Route::post('/importar-horarios', [HorarioController::class, 'importarCSV'])->name('horarios.importar');
