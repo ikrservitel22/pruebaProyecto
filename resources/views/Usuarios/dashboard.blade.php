@@ -50,6 +50,83 @@
 
 </div>
 
+    <!-- SECCIÓN DE FESTIVOS (INTEGRACIÓN) -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>Calendario de Festivos</h5>
+                    @if(session('success'))
+                        <div class="alert alert-success py-1 px-3 m-0">{{ session('success') }}</div>
+                    @endif
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Día</th>
+                                <th>Mes</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($festivos as $f)
+                            <tr>
+                                <td>{{ $f->dia }}</td>
+                                <td>{{ $f->mes }}</td>
+                                <td>{{ $f->descripcion }}</td>
+                                <td>
+                                    <!-- Botón que activa el formulario de edición -->
+                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar{{ $loop->index }}">
+                                        Editar
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- MODAL PARA CADA FESTIVO -->
+                            <div class="modal fade" id="modalEditar{{ $loop->index }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form action="{{ url('/Festivos/update') }}" method="POST">
+                                            @csrf
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Editar Festivo</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Campo oculto para el ID si lo tienes, o usas los campos actuales -->
+                                                <div class="mb-3">
+                                                    <label class="form-label">Día</label>
+                                                    <input type="number" name="dia" class="form-control" value="{{ $f->dia }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Mes</label>
+                                                    <input type="number" name="mes" class="form-control" value="{{ $f->mes }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Descripción</label>
+                                                    <input type="text" name="descripcion" class="form-control" value="{{ $f->descripcion }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -60,21 +137,21 @@ const ctx1 = document.getElementById('grafica1').getContext('2d');
 new Chart(ctx1, {
     type: 'line',
     data: {
-        labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
+        labels: @json($labels),
         datasets: [{
             label: 'Eventos',
-            data: [2, 9, 0, 20, 10],
+            data: @json($data),
 
-            // 🎨 colores
+            //  colores
             borderColor: '#fd150d',
             backgroundColor: 'rgba(253, 241, 13, 0.2)',
 
-            // 📏 estilo
+            //  estilo
             borderWidth: 3,
             tension: 0.4,
             fill: true, // relleno debajo de la línea
 
-            // 🔵 puntos
+            //  puntos
             pointBackgroundColor: '#00ff26',
             pointBorderColor: '#00ff26',
             pointRadius: 5,
