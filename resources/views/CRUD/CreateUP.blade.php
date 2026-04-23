@@ -31,6 +31,10 @@
                     <option value="3">Read/Write</option>
                 </select>
             </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Cedula</label>
+                <input type="int" name="cedula" class="form-control" placeholder="cedula">
+            </div>
         </div>
         <div class="d-flex justify-content-end mt-3">
             <button type="submit" class="btn border rounded bg-light me-2">crear usuario</button>

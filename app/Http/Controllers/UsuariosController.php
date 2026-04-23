@@ -30,7 +30,8 @@ class UsuariosController extends Controller
                     'usuario' => $request->usuario,
                     'clave' => $request->clave,
                     'state' => true,
-                    'permiso_id' => '2'
+                    'permiso_id' => '2',
+                    'cedula' => $request->cedula
                 ]);
                 Perusu::create([
                     'usuario_id' => $usuario->usuario_id, // importante

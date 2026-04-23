@@ -21,6 +21,7 @@ class CreateUPController extends Controller
                 'usuario' => $request->usuario,
                 'clave' => $request->clave,
                 'state' => true,
+                'cedula' => $request->cedula,
             ]);
 
             CreateUP::create([ // grada los datos

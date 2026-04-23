@@ -58,10 +58,20 @@ class AppServiceProvider extends ServiceProvider
                 ['nombre' => '#'],
                 ['nombre' => 'Name'],
                 ['nombre' => 'Username'],
-                ['nombre' => 'Password'],
-                ['nombre' => 'Rol'],
-                ['nombre' => 'Options'],
             ];
+
+            if (session('permiso_id') == 1 || session('permiso_id') == 4){
+                $listas[] = ['nombre' => 'Password'];
+                $listas[] = ['nombre' => 'Cedula'];
+            }
+
+            $listas[] = ['nombre' => 'Rol'];
+            
+            if (session('permiso_id') == 1 || session('permiso_id') == 4 || session('permiso_id') == 3){
+                $listas[] = ['nombre' => 'Options'];
+            }
+
+
             $Datos = DB::table('registro') 
                 ->join('per_usu', 'registro.usuario_id', '=', 'per_usu.usuario_id')
                 ->join('permisos', 'per_usu.permiso_id', '=', 'permisos.permiso_id')
@@ -70,6 +80,7 @@ class AppServiceProvider extends ServiceProvider
                     'registro.usuario',
                     'registro.nombre',
                     'registro.clave',
+                    'registro.cedula',
                     'permisos.permisos as permiso_nombre' 
                 )
                 ->where('registro.state', 1) // SOLO ACTIVOS

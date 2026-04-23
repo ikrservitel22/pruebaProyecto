@@ -18,6 +18,7 @@ class UpdateController extends Controller
                 'registro.usuario',
                 'registro.nombre',
                 'registro.clave',
+                'registro.cedula',
                 'per_usu.permiso_id'
             )
             ->where('registro.usuario_id', $id)
@@ -37,6 +38,7 @@ class UpdateController extends Controller
                 'usuario' => $request->usuario,
                 'nombre' => $request->nombre,
                 'clave' => $request->clave,
+                'cedula' => $request->cedeula,
             ]);
 
         // 🔹 actualizar tabla per_usu

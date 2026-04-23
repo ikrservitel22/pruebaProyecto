@@ -143,7 +143,7 @@
     }
 
     .fc .fc-event {
-        background-color: #5d646f !important;
+        background-color: #575d68 !important;
         border-color: #8a92a2 !important;
         cursor: pointer !important;
         border-radius: 6px;
@@ -166,6 +166,7 @@
 
     .fc .fc-timegrid-slot {
         height: 3em;
+        color: #ffffff !important;
     }
 
     .fc .fc-timegrid-slot-label {
