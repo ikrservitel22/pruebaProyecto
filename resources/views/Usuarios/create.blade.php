@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('Button')
+    <button onclick="history.back()" class="btn border btn-dark">Volver</button>
+@endsection
+
 @section('content')
 
     <h1 class="text-muted text-center fw-bold">CREAR CUENTA</h1>
@@ -19,8 +23,13 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label class="form-label">Nombre</label>
+                <label class="form-label">Contraseña</label>
                 <input type="password" name="clave" class="form-control" placeholder="pasword">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Cedula</label>
+                <input type="int" name="cedula" class="form-control" placeholder="cedula">
             </div>
 
         </div>
@@ -29,7 +38,7 @@
 
             <button type="submit" class="btn border rounded bg-light me-2">crear</button>
 
-            <a href="/" class="btn border rounded bg-light">
+            <a href="/login" class="btn border rounded bg-light">
                 Iniciar Sesion
             </a>
 
