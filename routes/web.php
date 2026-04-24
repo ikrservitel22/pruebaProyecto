@@ -96,3 +96,11 @@ Route::get('/Festivos', [FestivosController::class, 'festivo']);
 Route::get('/exportar-horarios', [HorarioController::class, 'exportarCSV']);
 
 Route::post('/importar-horarios', [HorarioController::class, 'importarCSV'])->name('horarios.importar');
+
+Route::get('/Festivos', [FestivosController::class, 'festivo']);
+
+Route::post('/Festivos/update', [FestivosController::class, 'update']);
+
+Route::post('/Festivos/store', [FestivosController::class, 'store']);
+
+Route::get('/Festivos/delete/{id}', [FestivosController::class, 'delete']);

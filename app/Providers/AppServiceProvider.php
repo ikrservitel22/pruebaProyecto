@@ -50,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
                     'items' => [
                         ['nombre' => 'Horario', 'url' => '/Horario'],
                         ['nombre' => 'Lista De Usuarios', 'url' => '/lista'],
+                        ['nombre' => 'Lista De Festivos/Eventos', 'url' => '/Festivos'],
                     ]
                 ];
 

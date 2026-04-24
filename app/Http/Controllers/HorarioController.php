@@ -424,15 +424,17 @@ class HorarioController extends Controller
         }
 
         $usuario_id = $usuario->usuario_id;
+        
+        $festivosColombia = $this->obtenerFestivosColombia($anio);
 
         foreach ($filas as $row) {
 
             $horarioTexto = trim($row[1]);
-
             if (!$horarioTexto) continue;
 
-            // Descripción por defecto (como querías)
-            $descripcion = 'Trabajo';
+            $descripcion = trim($row[0] ?? '') ?: 'Trabajo';
+
+            if (!str_contains($horarioTexto, '-')) continue;
 
             [$hora_inicio, $hora_fin] = explode('-', $horarioTexto);
 
@@ -440,14 +442,21 @@ class HorarioController extends Controller
 
                 if (strtoupper(trim($row[$i])) === 'X') {
 
-                    $dia = $header[$i];
+                    $dia = trim($header[$i]);
+                    if (!is_numeric($dia)) continue;
 
-                    $fecha = $anio . '-' . $mesNumero . '-' . str_pad($dia, 2, '0', STR_PAD_LEFT);
+                    $fechaString = $anio . '-' . $mesNumero . '-' . str_pad($dia, 2, '0', STR_PAD_LEFT);
+                    $fecha = Carbon::parse($fechaString);
+
+                    // 🔴 VALIDAR FESTIVOS Y DOMINGOS
+                    if ($this->esDiaInvalido($fecha, $festivosColombia)) {
+                        continue;
+                    }
 
                     DB::table('horarios')->insert([
                         'usuario_id' => $usuario_id,
                         'descripcion' => $descripcion,
-                        'fecha' => $fecha,
+                        'fecha' => $fecha->toDateString(),
                         'hora_inicio' => $hora_inicio,
                         'hora_fin' => $hora_fin,
                         'created_at' => now(),
