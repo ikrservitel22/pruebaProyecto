@@ -6,8 +6,22 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Controlador para la gestión de horarios.
+ *
+ * Maneja la creación, edición, eliminación y visualización de horarios,
+ * incluyendo la lógica de festivos colombianos y exportación/importación de CSV.
+ */
 class HorarioController extends Controller
 {
+    /**
+     * Muestra la vista de horarios con el calendario FullCalendar.
+     *
+     * Obtiene todos los horarios y usuarios, y los formatea para el calendario.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
+     */
     public function Horario(Request $request)
     {
         // Obtener TODOS los horarios para mostrar en el calendario
@@ -51,6 +65,26 @@ class HorarioController extends Controller
         ));
     }
 
+    /**
+     * Muestra el formulario para crear un nuevo evento de horario.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        $usuarios = DB::table('registro')->get();
+
+        return view('Usuarios.eventoN', compact('usuarios'));
+    }
+
+    /**
+     * Almacena un nuevo horario o serie de horarios.
+     *
+     * Valida los datos y crea horarios únicos o recurrentes, evitando festivos.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -64,7 +98,7 @@ class HorarioController extends Controller
 
         $fechaBase = Carbon::parse($request->fecha);
         $year = $fechaBase->year;
-        
+
         // Generamos el listado completo de festivos para ese año
         $festivosColombia = $this->obtenerFestivosColombia($year);
 
@@ -202,12 +236,7 @@ class HorarioController extends Controller
             'updated_at' => now()
         ]);
     }
-    public function create()
-    {
-        $usuarios = DB::table('registro')->get();
 
-        return view('Usuarios.eventoN', compact('usuarios'));
-    }
     public function edit($id)
     {
         $horario = DB::table('horarios')->where('horario_id', $id)->first();
@@ -215,6 +244,14 @@ class HorarioController extends Controller
 
         return view('Usuarios.editE', compact('horario', 'usuarios'));
     }
+
+    /**
+     * Actualiza un horario existente.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id ID del horario a actualizar
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, $id)
     {
         try {
@@ -261,6 +298,12 @@ class HorarioController extends Controller
         }
     }
 
+    /**
+     * Elimina un horario existente.
+     *
+     * @param int $id ID del horario a eliminar
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         try {
@@ -285,6 +328,12 @@ class HorarioController extends Controller
         }
     }
 
+    /**
+     * Exporta los horarios a un archivo CSV.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
     public function exportarCSV(Request $request)
     {
     $mesNumero = $request->mes ?? date('m');
@@ -348,10 +397,10 @@ class HorarioController extends Controller
             '12:00-22:00'
         ];
 
-        foreach ($horarios as $h) {
+        foreach ($horarios as $horarioItem) {
             $fila = [
                 ' ',
-                $h
+                $horarioItem
                 ];
 
             for ($i = 1; $i <= $diasMes; $i++) {
@@ -366,6 +415,12 @@ class HorarioController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
+    /**
+     * Importa horarios desde un archivo CSV.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function importarCSV(Request $request)
     {
         $file = $request->file('archivo');
@@ -424,30 +479,39 @@ class HorarioController extends Controller
         }
 
         $usuario_id = $usuario->usuario_id;
+        
+        $festivosColombia = $this->obtenerFestivosColombia($anio);
 
-        foreach ($filas as $row) {
+        foreach ($filas as $fila) {
 
-            $horarioTexto = trim($row[1]);
-
+            $horarioTexto = trim($fila[1]);
             if (!$horarioTexto) continue;
 
-            // Descripción por defecto (como querías)
-            $descripcion = 'Trabajo';
+            $descripcion = trim($fila[0] ?? '') ?: 'Trabajo';
+
+            if (!str_contains($horarioTexto, '-')) continue;
 
             [$hora_inicio, $hora_fin] = explode('-', $horarioTexto);
 
-            for ($i = 3; $i < count($row); $i++) {
+            for ($i = 3; $i < count($fila); $i++) {
 
-                if (strtoupper(trim($row[$i])) === 'X') {
+                if (strtoupper(trim($fila[$i])) === 'X') {
 
-                    $dia = $header[$i];
+                    $dia = trim($header[$i]);
+                    if (!is_numeric($dia)) continue;
 
-                    $fecha = $anio . '-' . $mesNumero . '-' . str_pad($dia, 2, '0', STR_PAD_LEFT);
+                    $fechaString = $anio . '-' . $mesNumero . '-' . str_pad($dia, 2, '0', STR_PAD_LEFT);
+                    $fecha = Carbon::parse($fechaString);
+
+                    // VALIDAR FESTIVOS Y DOMINGOS
+                    if ($this->esDiaInvalido($fecha, $festivosColombia)) {
+                        continue;
+                    }
 
                     DB::table('horarios')->insert([
                         'usuario_id' => $usuario_id,
                         'descripcion' => $descripcion,
-                        'fecha' => $fecha,
+                        'fecha' => $fecha->toDateString(),
                         'hora_inicio' => $hora_inicio,
                         'hora_fin' => $hora_fin,
                         'created_at' => now(),

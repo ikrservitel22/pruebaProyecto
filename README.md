@@ -1,3 +1,42 @@
+# Proyecto de Gestión de Horarios y Usuarios
+
+Este es un proyecto Laravel para la gestión de horarios, usuarios y días festivos. Incluye funcionalidades de calendario con FullCalendar, gestión de permisos y exportación/importación de datos.
+
+## Características
+
+- **Gestión de Usuarios**: Creación, edición, eliminación y autenticación de usuarios
+- **Horarios**: Asignación de horarios con validación de días festivos colombianos
+- **Calendario Interactivo**: Visualización de horarios con FullCalendar
+- **Festivos**: Gestión de días festivos y eventos especiales
+- **Permisos**: Sistema de roles y permisos para usuarios
+- **Exportación/Importación**: Funcionalidad CSV para horarios
+
+## Tecnologías Utilizadas
+
+- **Backend**: Laravel 12.x, PHP 8.2
+- **Frontend**: Vite, Bootstrap 5.3, Tailwind CSS 4.0, FullCalendar 6.1.20
+- **Base de Datos**: SQLite
+- **Autenticación**: Sesiones personalizadas
+
+## Instalación
+
+1. Clonar el repositorio
+2. Instalar dependencias: `composer install` y `npm install`
+3. Configurar base de datos en `.env`
+4. Ejecutar migraciones: `php artisan migrate`
+5. Compilar assets: `npm run build`
+6. Iniciar servidor: `php artisan serve`
+
+## Uso
+
+- Acceder a `/` para la página principal
+- Iniciar sesión con credenciales existentes
+- Gestionar usuarios desde `/lista`
+- Ver calendario de horarios en `/Horario`
+- Administrar festivos en `/Festivos`
+
+---
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

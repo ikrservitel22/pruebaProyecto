@@ -37,8 +37,11 @@
                         <tr>
                             <td>{{ $Dato->usuario_id }}</td>
                             <td>{{ $Dato->nombre }}</td> 
-                            <td>{{ $Dato->usuario }}</td> 
-                            <td>{{ $Dato->clave }}</td> 
+                            <td>{{ $Dato->usuario }}</td>
+                            @if (session('permiso_id') == 1 || session('permiso_id') == 4 )
+                                <td>{{ $Dato->clave }}</td> 
+                                <td>{{ $Dato->cedula }}</td> 
+                            @endif
                             <td>{{ $Dato->permiso_nombre }}</td>
                             <td>
                                 @if (session('permiso_id') == 1 || session('permiso_id') == 4 )
