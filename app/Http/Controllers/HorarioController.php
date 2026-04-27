@@ -503,7 +503,7 @@ class HorarioController extends Controller
                     $fechaString = $anio . '-' . $mesNumero . '-' . str_pad($dia, 2, '0', STR_PAD_LEFT);
                     $fecha = Carbon::parse($fechaString);
 
-                    // 🔴 VALIDAR FESTIVOS Y DOMINGOS
+                    // VALIDAR FESTIVOS Y DOMINGOS
                     if ($this->esDiaInvalido($fecha, $festivosColombia)) {
                         continue;
                     }
