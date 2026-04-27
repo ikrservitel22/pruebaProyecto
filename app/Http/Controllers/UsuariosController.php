@@ -101,7 +101,10 @@ class UsuariosController extends Controller
      */
     public function lista()
     {
-        $usuarios = Usuarios::all(); // trae datos de la BD
+        $usuarios = Usuarios::with('permisos')->paginate(5)->through(function($usuario) {
+            $usuario->permiso_nombre = $usuario->permisos->first()->nombre ?? 'Sin permiso';
+            return $usuario;
+        });
         return view('Usuarios.lista', compact('usuarios'));
     }
 

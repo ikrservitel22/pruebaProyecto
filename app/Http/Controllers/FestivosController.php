@@ -21,7 +21,7 @@ class FestivosController extends Controller
     {
         $festivos = DB::table('festivos')
             ->select('festivo_id', 'dia', 'mes', 'descripcion')
-            ->get();
+            ->paginate(5);
 
         return view('Usuarios.festivos', compact('festivos'));
     }

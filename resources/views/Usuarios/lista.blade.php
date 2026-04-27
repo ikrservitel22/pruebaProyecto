@@ -11,7 +11,10 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-8">
-                        <h2>Listade Usuarios</h2>
+                        <h2>Lista de Usuarios</h2>
+                        @if(isset($usuarios) && $usuarios->count() == 0)
+                            <p class="text-muted">No se encontraron resultados para la búsqueda.</p>
+                        @endif
                     </div>
                     @if (session('permiso_id') == 1 || session('permiso_id') == 3 || session('permiso_id') == 4)
                         <div class="col-sm-4 text-end">
@@ -26,40 +29,46 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        @foreach($listas as $lista)
-                            <th>{{ $lista['nombre'] }}</th>
-                        @endforeach
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        @if (session('permiso_id') == 1 || session('permiso_id') == 4)
+                            <th>Clave</th>
+                            <th>Cédula</th>
+                        @endif
+                        <th>Permiso</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach($Datos as $Dato)
+                    @foreach($usuarios as $usuario)
                         <tr>
-                            <td>{{ $Dato->usuario_id }}</td>
-                            <td>{{ $Dato->nombre }}</td> 
-                            <td>{{ $Dato->usuario }}</td>
+                            <td>{{ $usuario->usuario_id }}</td>
+                            <td>{{ $usuario->nombre }}</td> 
+                            <td>{{ $usuario->usuario }}</td>
                             @if (session('permiso_id') == 1 || session('permiso_id') == 4 )
-                                <td>{{ $Dato->clave }}</td> 
-                                <td>{{ $Dato->cedula }}</td> 
+                                <td>{{ $usuario->clave }}</td> 
+                                <td>{{ $usuario->cedula }}</td> 
                             @endif
-                            <td>{{ $Dato->permiso_nombre }}</td>
+                            <td>{{ $usuario->permiso_nombre ?? 'Sin permiso' }}</td>
                             <td>
                                 @if (session('permiso_id') == 1 || session('permiso_id') == 4 )
                                         <button type="button" 
                                             class="btn btn-danger"
-                                            onclick="confirmarEliminacion({{ $Dato->usuario_id }})">
+                                            onclick="confirmarEliminacion({{ $usuario->usuario_id }})">
                                             Delete
                                         </button>
 
-                                        <form id="formEliminar{{ $Dato->usuario_id }}" 
-                                            action="{{ route('Usuarios.Softdelete', $Dato->usuario_id) }}" 
+                                        <form id="formEliminar{{ $usuario->usuario_id }}" 
+                                            action="{{ route('Usuarios.Softdelete', $usuario->usuario_id) }}" 
                                             method="POST" style="display:none;">
                                             @csrf
                                             @method('DELETE')
                                         </form>
                                 @endif
                                 @if (session('permiso_id') == 1 || session('permiso_id') == 3 || session('permiso_id') == 4)
-                                    <a href="{{ route('Usuarios.Edit', $Dato->usuario_id) }}" class="btn btn-success">
+                                    <a href="{{ route('Usuarios.Edit', $usuario->usuario_id) }}" class="btn btn-success">
                                         Edit
                                     </a>
                                 @endif
@@ -70,6 +79,10 @@
                 </tbody>
 
             </table>
+            <!-- Paginación -->
+            <div class="justify-content-center mt-4">
+                {{ $usuarios->links('pagination::bootstrap-5') }}
+            </div>
         </div>
     </div>
 </div>

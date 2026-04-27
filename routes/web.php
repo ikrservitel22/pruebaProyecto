@@ -63,9 +63,21 @@ Route::get('/create', function () {
 
 Route::get('/buscar', function () {
     $busqueda = request('q'); // obtiene el valor del parámetro de búsqueda "q" de la URL
-    $Usuarios = Usuarios::where('usuario', 'LIKE', "%$busqueda%")->get(); // busca en la tabla "registro" los registros donde el campo "usuario" contenga el valor de búsqueda
-    return view('Usuarios.lista', compact('Usuarios')); // devuelve la vista "lista" con los resultados de la búsqueda
-});
+    if (empty($busqueda)) {
+        return redirect('/lista'); // si no hay búsqueda, redirige a la lista completa
+    }
+    $usuarios = Usuarios::with('permisos')
+                        ->where('usuario', 'LIKE', "%$busqueda%")
+                        ->orWhere('nombre', 'LIKE', "%$busqueda%")
+                        ->orWhere('cedula', 'LIKE', "%$busqueda%")
+                        ->paginate(5)
+                        ->appends(request()->except('page'))
+                        ->through(function($usuario) {
+                            $usuario->permiso_nombre = $usuario->permisos->first()->nombre ?? 'Sin permiso';
+                            return $usuario;
+                        }); // busca en múltiples campos y pagina
+    return view('Usuarios.lista', compact('usuarios')); // devuelve la vista "lista" con los resultados de la búsqueda
+})->middleware(['check.session']); // protege la ruta con middleware de sesión
 
 // Rutas protegidas - requieren sesión activa
 Route::middleware(['check.session'])->group(function () {
