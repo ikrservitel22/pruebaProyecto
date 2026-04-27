@@ -5,8 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Controlador para el dashboard.
+ *
+ * Maneja la visualización de estadísticas y datos del dashboard.
+ */
 class DashboardController extends Controller
 {
+    /**
+     * Muestra el dashboard con estadísticas de horarios por día.
+     *
+     * @return \Illuminate\View\View
+     */
     public function dash()
     {
         // Obtener horarios por día (1=Domingo, 2=Lunes...)
@@ -36,6 +46,12 @@ class DashboardController extends Controller
 
         return view('Usuarios.dashboard', compact('labels', 'data'));
     }
+
+    /**
+     * Muestra la lista de festivos (duplicado con FestivosController).
+     *
+     * @return \Illuminate\View\View
+     */
     public function festivo()
     {
         $festivos = DB::table('festivos')
@@ -44,6 +60,12 @@ class DashboardController extends Controller
         return view('Usuarios.festivos', compact('festivos'));
     }
 
+    /**
+     * Actualiza un festivo (duplicado con FestivosController).
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request)
     {
         DB::table('festivos')

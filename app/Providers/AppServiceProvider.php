@@ -7,10 +7,17 @@ use Illuminate\Support\Facades\View;
 use App\Models\Usuarios;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Proveedor de servicios de la aplicación.
+ *
+ * Registra servicios y configura el composer de vistas para el menú dinámico.
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Registra cualquier servicio de la aplicación.
+     *
+     * @return void
      */
     public function register(): void
     {
@@ -18,7 +25,11 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Inicializa cualquier servicio de la aplicación.
+     *
+     * Configura el composer de vistas para compartir datos del menú y listas con todas las vistas.
+     *
+     * @return void
      */
     public function boot(): void
     {

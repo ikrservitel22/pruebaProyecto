@@ -3,12 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\CreateUP;
+use App\Models\UserPermission;
 use App\Models\Usuarios;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Controlador para actualizar usuarios.
+ *
+ * Maneja la edición y actualización de datos de usuarios y sus permisos.
+ */
 class UpdateController extends Controller
 {
+    /**
+     * Muestra el formulario de edición de un usuario.
+     *
+     * @param int $id ID del usuario a editar
+     * @return \Illuminate\View\View
+     */
     public function Edit($id)
     {
         $Usuario = DB::table('registro') 
@@ -29,9 +40,16 @@ class UpdateController extends Controller
         return view('CRUD.Edit', compact('Usuario', 'Permisos'));
     }
 
+    /**
+     * Actualiza los datos de un usuario.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id ID del usuario a actualizar
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function Update(Request $request, $id)
     {
-        // 🔹 actualizar tabla registro
+        // actualizar tabla registro
         DB::table('registro')
             ->where('usuario_id', $id)
             ->update([
@@ -41,7 +59,7 @@ class UpdateController extends Controller
                 'cedula' => $request->cedeula,
             ]);
 
-        // 🔹 actualizar tabla per_usu
+        // actualizar tabla per_usu
         DB::table('per_usu')
             ->where('usuario_id', $id)
             ->update([

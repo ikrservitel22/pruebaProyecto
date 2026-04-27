@@ -159,7 +159,7 @@ new Chart(ctx1, {
         }]
     },
 
-    // ⚙️ TODO lo visual va aquí
+    // TODO lo visual va aquí
     options: {
         responsive: true,
 
@@ -218,7 +218,7 @@ new Chart(ctx2, {
         datasets: [{
             data: [60, 40, 100],
 
-            // 🎨 colores de cada sección
+            // colores de cada sección
             backgroundColor: [
                 '#ff3700',
                 '#00ffdd',

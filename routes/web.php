@@ -8,15 +8,26 @@ use App\Http\Controllers\CreateUPController;
 use App\Http\Controllers\DeleteController;
 use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\PermisosController;
-use App\Http\Controllers\PerusuController;
 use App\Http\Controllers\InactivateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FestivosController;
 
+/*
+|--------------------------------------------------------------------------
+| Rutas Web
+|--------------------------------------------------------------------------
+|
+| Aquí se definen todas las rutas web de la aplicación Laravel.
+| Incluye rutas públicas y protegidas por middleware de sesión.
+|
+*/
+
+// Ruta de prueba para festivos
 Route::get('/test', [FestivosController::class, 'festivo']);
 
+// Rutas públicas - no requieren autenticación
 Route::get('/', [UsuariosController::class, 'index']);
 
 Route::post('/login', [UsuariosController::class, 'login']);
@@ -56,16 +67,17 @@ Route::get('/buscar', function () {
     return view('Usuarios.lista', compact('Usuarios')); // devuelve la vista "lista" con los resultados de la búsqueda
 });
 
+// Rutas protegidas - requieren sesión activa
 Route::middleware(['check.session'])->group(function () {
     Route::get('/lista', [UsuariosController::class, 'lista']);
     Route::get('/inputtt', [UsuariosController::class, 'inputtt']);
     Route::get('/CreateUP', [UsuariosController::class, 'CreateUP']);
     
-    // Rutas para Horarios
+    // Rutas para gestión de horarios
     Route::get('/Horario', [HorarioController::class, 'Horario'])->name('Usuarios.horario');
     Route::post('/Horario', [HorarioController::class, 'Horario']);
     
-    // Rutas para Eventos
+    // Rutas para gestión de eventos (horarios)
     Route::post('/Evento', [HorarioController::class, 'store'])->name('Usuarios.eventoN');
     Route::get('/Evento', [HorarioController::class, 'create']);
     Route::put('/Evento/{id}', [HorarioController::class, 'update'])->name('evento.update');

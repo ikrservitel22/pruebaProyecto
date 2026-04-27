@@ -6,19 +6,27 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Middleware para verificar la sesión del usuario.
+ *
+ * Verifica si el usuario tiene una sesión activa antes de permitir el acceso a rutas protegidas.
+ */
 class CheckSession
 {
     /**
-     * Handle an incoming request.
+     * Maneja una solicitud entrante.
      *
-     * @param  Closure(Request): (Response)  $next
+     * Verifica si existe la variable de sesión 'usuario'.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next): Response
     {
         if (!session()->has('usuario')) {
-            return redirect('/'); // ❌ no logueado
+            return redirect('/'); // no logueado
         }
 
-        return $next($request); // ✅ deja pasar
+        return $next($request); // deja pasar
     }
 }
