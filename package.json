@@ -15,9 +15,12 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@carbon/icons-react": "^11.79.0",
+        "@carbon/react": "^1.106.0",
         "@fullcalendar/core": "^6.1.20",
         "@fullcalendar/daygrid": "^6.1.20",
         "@fullcalendar/list": "^6.1.20",
-        "@fullcalendar/timegrid": "^6.1.20"
+        "@fullcalendar/timegrid": "^6.1.20",
+        "sass": "^1.99.0"
     }
 }

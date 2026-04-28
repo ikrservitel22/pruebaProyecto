@@ -37,9 +37,9 @@ class CreateUPController extends Controller
                 'cedula' => $request->cedula,
             ]);
 
-            // Guardar el permiso asociado en la tabla intermedia
+            // Guardar el rol asociado en la tabla intermedia
             UserPermission::create([
-                'permiso_id' => $request->permiso,
+                'rol_id' => $request->rol_id,
                 'usuario_id' => $usuario->usuario_id,
             ]);
         }

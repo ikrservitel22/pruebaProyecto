@@ -16,7 +16,7 @@
                             <p class="text-muted">No se encontraron resultados para la búsqueda.</p>
                         @endif
                     </div>
-                    @if (session('permiso_id') == 1 || session('permiso_id') == 3 || session('permiso_id') == 4)
+                    @if (in_array(session('rol_nombre'), ['admin', 'administrativo', 'supervizor'], true))
                         <div class="col-sm-4 text-end">
                             <a href="/CreateUP" class="btn btn-info">
                                 <i class="fa fa-plus"></i> Nuevo Usuario
@@ -32,12 +32,17 @@
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Usuario</th>
-                        @if (session('permiso_id') == 1 || session('permiso_id') == 4)
+                        @if (in_array(session('rol_nombre'), ['admin'], true))
                             <th>Clave</th>
+                        @endif
+                        @if (in_array(session('rol_nombre'), ['admin', 'supervizor'], true))
                             <th>Cédula</th>
                         @endif
-                        <th>Permiso</th>
-                        <th>Acciones</th>
+                        <th>Rol</th>
+                        @if (in_array(session('rol_nombre'), ['admin', 'administrativo', 'supervizor'], true))
+                            <th>Acciones</th>
+                        @endif
+                        
                     </tr>
                 </thead>
 
@@ -47,32 +52,36 @@
                             <td>{{ $usuario->usuario_id }}</td>
                             <td>{{ $usuario->nombre }}</td> 
                             <td>{{ $usuario->usuario }}</td>
-                            @if (session('permiso_id') == 1 || session('permiso_id') == 4 )
+                            @if (in_array(session('rol_nombre'), ['admin'], true))
                                 <td>{{ $usuario->clave }}</td> 
+                            @endif
+                            @if (in_array(session('rol_nombre'), ['admin', 'supervizor'], true))
                                 <td>{{ $usuario->cedula }}</td> 
                             @endif
-                            <td>{{ $usuario->permiso_nombre ?? 'Sin permiso' }}</td>
-                            <td>
-                                @if (session('permiso_id') == 1 || session('permiso_id') == 4 )
-                                        <button type="button" 
-                                            class="btn btn-danger"
-                                            onclick="confirmarEliminacion({{ $usuario->usuario_id }})">
-                                            Delete
-                                        </button>
+                            <td>{{ $usuario->rol_nombre ?? 'Sin rol' }}</td>
+                            @if (in_array(session('rol_nombre'), ['admin', 'administrativo', 'supervizor'], true))
+                                <td>
+                                @if (in_array(session('rol_nombre'), ['admin'], true))
+                                    <button type="button" 
+                                        class="btn btn-danger"
+                                        onclick="confirmarEliminacion({{ $usuario->usuario_id }})">
+                                        Delete
+                                    </button>
 
-                                        <form id="formEliminar{{ $usuario->usuario_id }}" 
-                                            action="{{ route('Usuarios.Softdelete', $usuario->usuario_id) }}" 
-                                            method="POST" style="display:none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
+                                    <form id="formEliminar{{ $usuario->usuario_id }}" 
+                                        action="{{ route('Usuarios.Softdelete', $usuario->usuario_id) }}" 
+                                        method="POST" style="display:none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
                                 @endif
-                                @if (session('permiso_id') == 1 || session('permiso_id') == 3 || session('permiso_id') == 4)
+                                @if (in_array(session('rol_nombre'), ['admin', 'administrativo', 'supervizor'], true))
                                     <a href="{{ route('Usuarios.Edit', $usuario->usuario_id) }}" class="btn btn-success">
                                         Edit
                                     </a>
                                 @endif
-                            </td>
+                                <td>
+                            @endif
                         </tr>
                     @endforeach
 

@@ -23,12 +23,13 @@
                 <input type="password" name="clave" class="form-control" placeholder="password">
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Tipo</label>
-                <select name="permiso" class="form-select text-dark" aria-label="Default select example">
-                    <option value="" selected>Seleccione un permiso</option>
+                <label class="form-label">Rol</label>
+                <select name="rol_id" class="form-select text-dark" aria-label="Default select example">
+                    <option value="" selected>Seleccione un rol</option>
                     <option value="1">Admin</option>
-                    <option value="2">Read</option>
-                    <option value="3">Read/Write</option>
+                    <option value="2">Normal</option>
+                    <option value="3">Administrativo</option>
+                    <option value="4">Supervisor</option>
                 </select>
             </div>
             <div class="col-md-6 mb-3">

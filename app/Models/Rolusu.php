@@ -5,26 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Modelo para las relaciones usuario-permiso.
+ * Modelo para las relaciones usuario-rol.
  *
- * Representa las asociaciones usuario-permiso en la tabla 'per_usu'.
+ * Representa las asociaciones usuario-rol en la tabla 'rol_usu'.
  * Nota: Este modelo duplica funcionalidad con el modelo CreateUP.
  */
-class Perusu extends Model
+class Rolusu extends Model
 {
     /**
      * La tabla asociada con el modelo.
      *
      * @var string
      */
-    protected $table = 'per_usu'; // tabla del sql
+    protected $table = 'rol_usu'; // tabla del sql
 
     /**
      * La clave primaria del modelo.
      *
      * @var string
      */
-    protected $primaryKey = 'per_usu_id';
+    protected $primaryKey = 'rol_usu_id';
 
     /**
      * Indica si el modelo debe ser timestamped.
@@ -40,6 +40,6 @@ class Perusu extends Model
      */
     protected $fillable = [        //datos de ingreso
         'usuario_id',
-        'permiso_id',
+        'rol_id',
     ];
 }

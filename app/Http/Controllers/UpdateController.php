@@ -23,21 +23,21 @@ class UpdateController extends Controller
     public function Edit($id)
     {
         $Usuario = DB::table('registro') 
-            ->join('per_usu', 'registro.usuario_id', '=', 'per_usu.usuario_id')
+            ->join('rol_usu', 'registro.usuario_id', '=', 'rol_usu.usuario_id')
             ->select(
                 'registro.usuario_id',
                 'registro.usuario',
                 'registro.nombre',
                 'registro.clave',
                 'registro.cedula',
-                'per_usu.permiso_id'
+                'rol_usu.rol_id'
             )
             ->where('registro.usuario_id', $id)
             ->first();
 
-        $Permisos = DB::table('permisos')->get();
+        $Roles = DB::table('roles')->get();
 
-        return view('CRUD.Edit', compact('Usuario', 'Permisos'));
+        return view('CRUD.Edit', compact('Usuario', 'Roles'));
     }
 
     /**
@@ -56,22 +56,22 @@ class UpdateController extends Controller
                 'usuario' => $request->usuario,
                 'nombre' => $request->nombre,
                 'clave' => $request->clave,
-                'cedula' => $request->cedeula,
+                'cedula' => $request->cedula,
             ]);
 
-        // actualizar tabla per_usu
-        DB::table('per_usu')
+        // actualizar tabla rol_usu
+        DB::table('rol_usu')
             ->where('usuario_id', $id)
             ->update([
-                'permiso_id' => $request->permiso_id,
+                'rol_id' => $request->rol_id,
             ]);
 
-        $permiso = DB::table('per_usu')
+        $rol = DB::table('rol_usu')
             ->where('usuario_id', $id)
-            ->value('permiso_id');
+            ->value('rol_id');
 
         if (session('id') == $id) {
-            session(['permiso_id' => $permiso]);
+            session(['rol_id' => $rol]);
         }
         
         return redirect('/lista')->with('success', 'Usuario actualizado');
