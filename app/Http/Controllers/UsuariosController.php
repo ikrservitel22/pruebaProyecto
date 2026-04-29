@@ -48,14 +48,13 @@ class UsuariosController extends Controller
             'usuario' => $request->usuario,
             'clave' => $request->clave,
             'state' => true,
-            'permiso_id' => '2',
             'cedula' => $request->cedula
         ]);
 
-        // Crear relación de permiso en la tabla intermedia 'per_usu'
+        // Crear relación de permiso en la tabla intermedia 'rol_usu'
         UserPermission::create([
             'usuario_id' => $nuevoUsuario->usuario_id,
-            'permiso_id' => 2
+            'rol_id' => 2
         ]);
 
         return redirect('/login')->with('success', 'usuario creado');
@@ -80,15 +79,19 @@ class UsuariosController extends Controller
             return redirect('/login')->with('error', 'Usuario o clave incorrectos');
         }
 
-        // Obtener permiso del usuario desde la tabla intermedia
-        $permisoUsuario = UserPermission::where('usuario_id', $usuario->usuario_id)
-                                ->value('permiso_id');
+        // Obtener rol del usuario desde la tabla intermedia
+        $rolUsuario = UserPermission::where('usuario_id', $usuario->usuario_id)
+                                ->first();
+
+        $rolId = $rolUsuario?->rol_id;
+        $rolNombre = $rolUsuario?->rol?->rol;
 
         // Guardar datos de sesión del usuario autenticado
         session([
             'usuario' => $usuario->usuario,
             'id' => $usuario->usuario_id,
-            'permiso_id' => $permisoUsuario
+            'rol_id' => $rolId,
+            'rol_nombre' => $rolNombre ? strtolower($rolNombre) : null,
         ]);
 
         return redirect('/')->with('success', 'Sesión iniciada correctamente');
@@ -101,8 +104,8 @@ class UsuariosController extends Controller
      */
     public function lista()
     {
-        $usuarios = Usuarios::with('permisos')->paginate(5)->through(function($usuario) {
-            $usuario->permiso_nombre = $usuario->permisos->first()->nombre ?? 'Sin permiso';
+        $usuarios = Usuarios::with('roles')->paginate(5)->through(function($usuario) {
+            $usuario->rol_nombre = $usuario->roles->first()->rol ?? 'Sin rol';
             return $usuario;
         });
         return view('Usuarios.lista', compact('usuarios'));

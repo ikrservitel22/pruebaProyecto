@@ -39,27 +39,77 @@ class Usuarios extends Model
     ];
 
     /**
-     * Obtener los permisos asociados con el usuario.
+     * Obtener los roles asociados con el usuario.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function permisos()
+    public function roles()
     {
         return $this->belongsToMany(
-            Permisos::class,
-            'per_usu',
+            roles::class,
+            'rol_usu',
             'usuario_id',
-            'permiso_id'
+            'rol_id'
         );
     }
 
     /**
-     * Obtener las relaciones usuario-permiso.
+     * Obtener las relaciones usuario-rol.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function userPermissions()
     {
         return $this->hasMany(UserPermission::class, 'usuario_id', 'usuario_id');
+    }
+
+    /**
+     * Obtener todos los permisos del usuario a través de sus roles.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function permisosDeRol()
+    {
+        return $this->roles->flatMap->permisos->unique('permiso_id');
+    }
+
+    /**
+     * Determina si el usuario tiene un rol por nombre.
+     *
+     * @param string $nombreRol
+     * @return bool
+     */
+    public function hasRole(string $nombreRol): bool
+    {
+        $nombreRol = strtolower($nombreRol);
+        return $this->roles->contains(function ($rol) use ($nombreRol) {
+            return strtolower($rol->rol) === $nombreRol;
+        });
+    }
+
+    /**
+     * Determina si el usuario tiene un permiso por nombre a través de sus roles.
+     *
+     * @param string $nombrePermiso
+     * @return bool
+     */
+    public function hasPermission(string $nombrePermiso): bool
+    {
+        $nombrePermiso = strtolower($nombrePermiso);
+        return $this->permisosDeRol()->contains(function ($permiso) use ($nombrePermiso) {
+            return strtolower($permiso->permisos) === $nombrePermiso;
+        });
+    }
+
+    /**
+     * Determina si el usuario puede acceder a una funcionalidad basada en permisos.
+     * Los administradores tienen acceso a todo por defecto.
+     *
+     * @param string $nombrePermiso
+     * @return bool
+     */
+    public function canAccess(string $nombrePermiso): bool
+    {
+        return $this->hasRole('admin') || $this->hasPermission($nombrePermiso);
     }
 }

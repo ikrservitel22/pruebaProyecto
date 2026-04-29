@@ -30,12 +30,12 @@
         </div>
 
         <div class="col-md-6 mb-3">
-            <label class="form-label">Permiso</label>
-            <select name="permiso_id" class="form-control">
-                @foreach($Permisos as $permiso)
-                    <option value="{{ $permiso->permiso_id }}"
-                        {{ $Usuario->permiso_id == $permiso->permiso_id ? 'selected' : '' }}>
-                        {{ $permiso->permisos }}
+            <label class="form-label">Rol</label>
+            <select name="rol_id" class="form-control">
+                @foreach($Roles as $rol)
+                    <option value="{{ $rol->rol_id }}"
+                        {{ $Usuario->rol_id == $rol->rol_id ? 'selected' : '' }}>
+                        {{ $rol->rol }}
                     </option>
                 @endforeach
             </select>

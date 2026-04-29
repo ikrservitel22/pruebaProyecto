@@ -4,10 +4,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Modelo para las relaciones usuario-permiso.
+ * Modelo para las relaciones usuario-rol.
  * 
- * Representa la tabla intermedia 'per_usu' que asocia usuarios con permisos.
- * Este modelo reemplaza CreateUP.php y Perusu.php.
+ * Representa la tabla intermedia 'rol_usu' que asocia usuarios con roles.
+ * Este modelo reemplaza CreateUP.php y Rolusu.php.
  */
 class UserPermission extends Model
 {
@@ -15,13 +15,13 @@ class UserPermission extends Model
      * La tabla asociada con el modelo.
      * @var string
      */
-    protected $table = 'per_usu';
+    protected $table = 'rol_usu';
 
     /**
      * La clave primaria del modelo.
      * @var string
      */
-    protected $primaryKey = 'per_usu_id';
+    protected $primaryKey = 'rol_usu_id';
 
     /**
      * Indica si el modelo debe ser timestamped.
@@ -35,7 +35,7 @@ class UserPermission extends Model
      */
     protected $fillable = [
         'usuario_id',
-        'permiso_id',
+        'rol_id',
     ];
 
     /**
@@ -48,11 +48,11 @@ class UserPermission extends Model
     }
 
     /**
-     * Obtener el permiso asociado.
+     * Obtener el rol asociado.
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function permiso()
+    public function rol()
     {
-        return $this->belongsTo(\App\Models\Permisos::class, 'permiso_id', 'permiso_id');
+        return $this->belongsTo(roles::class, 'rol_id', 'rol_id');
     }
 }

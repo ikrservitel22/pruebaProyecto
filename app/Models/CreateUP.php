@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Modelo para las relaciones usuario-permiso.
+ * Modelo para las relaciones usuario-rol.
  *
- * Representa las asociaciones usuario-permiso en la tabla 'per_usu'.
+ * Representa las asociaciones usuario-rol en la tabla 'rol_usu'.
  */
 class CreateUP extends Model
 {
@@ -16,7 +16,7 @@ class CreateUP extends Model
      *
      * @var string
      */
-    protected $table = 'per_usu'; // tabla del sql
+    protected $table = 'rol_usu'; // tabla del sql
 
     /**
      * Los atributos que son asignables en masa.
@@ -25,7 +25,7 @@ class CreateUP extends Model
      */
     protected $fillable = [        //datos de ingreso
         'usuario_id',
-        'permiso_id'
+        'rol_id'
     ];
 
     /**

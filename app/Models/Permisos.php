@@ -35,17 +35,17 @@ class permisos extends Model
     ];
 
     /**
-     * Obtener los usuarios asociados con el permiso.
+     * Obtener los roles asociados con el permiso.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function usuarios()
+    public function roles()
     {
         return $this->belongsToMany(
-            Usuarios::class,
-            'per_usu',
+            roles::class,
+            'per_rol',
             'permiso_id',
-            'usuario_id'
+            'rol_id'
         );
     }
 }
