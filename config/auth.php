@@ -36,11 +36,15 @@ return [
     | Supported: "session"
     |
     */
-
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'users', // 👈 recomendable agregarlo también
+        ],
+
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users', // 👈 ESTO ES CLAVE
         ],
     ],
 
@@ -64,13 +68,8 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', User::class),
+            'model'  => App\Models\Usuarios::class, // 👈 tu modelo, no el User de Laravel
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

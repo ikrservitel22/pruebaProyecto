@@ -56,6 +56,15 @@ class HorarioController extends Controller
         $dias = [];
         $horas = [];
 
+        // Si la petición es API, retorna JSON
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return response()->json([
+                'success'  => true,
+                'horarios' => $horariosFormateados,
+                'usuarios' => $usuarios,
+            ]);
+        }
+
         return view('Usuarios.horario', compact(
             'dias',
             'horas',

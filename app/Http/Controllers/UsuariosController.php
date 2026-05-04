@@ -79,6 +79,23 @@ class UsuariosController extends Controller
             return redirect('/login')->with('error', 'Usuario o clave incorrectos');
         }
 
+        if ($request->expectsJson()) {
+
+            $credentials = [
+                'usuario' => $request->usuario,
+                'password' => $request->clave
+            ];
+
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'No autorizado'], 401);
+            }
+
+            return response()->json([
+                'token' => $token,
+                'user' => $usuario
+            ]);
+        }
+
         // Obtener rol del usuario desde la tabla intermedia
         $rolUsuario = UserPermission::where('usuario_id', $usuario->usuario_id)
                                 ->first();
