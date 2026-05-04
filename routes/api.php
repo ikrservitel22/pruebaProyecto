@@ -5,13 +5,17 @@ use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\HorarioController;
 
 
-Route::get('/test', function () {
-    return response()->json([
-        'message' => 'API funcionando'
-    ]);
-});
+
 
 Route::post('/login', [UsuariosController::class, 'login']);
+
+Route::middleware('Jwt')->group(function () {
+    Route::get('/test', function () {
+        return response()->json([
+            'message' => 'API funcionando'
+        ]);
+    });
+});
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/horarios', [HorarioController::class, 'Horario']);

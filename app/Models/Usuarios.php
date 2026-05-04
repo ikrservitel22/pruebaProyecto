@@ -2,15 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
-/**
- * Modelo para la gestión de usuarios.
- *
- * Representa a los usuarios en la tabla 'registro'.
- */
-class Usuarios extends Model implements JWTSubject
+class Usuarios extends Authenticatable implements JWTSubject
 {
     /**
      * La tabla asociada con el modelo.
