@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
  * Modelo para la gestión de usuarios.
  *
  * Representa a los usuarios en la tabla 'registro'.
  */
-class Usuarios extends Model
+class Usuarios extends Model implements JWTSubject
 {
     /**
      * La tabla asociada con el modelo.
@@ -43,6 +44,19 @@ class Usuarios extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
+
+    // 👇 "mi ID es usuario_id"
+    public function getJWTIdentifier()
+    {
+        return $this->getKey(); // retorna el valor de usuario_id
+    }
+
+    // 👇 no necesitas datos extra en el token por ahora
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
     public function roles()
     {
         return $this->belongsToMany(
@@ -111,5 +125,10 @@ class Usuarios extends Model
     public function canAccess(string $nombrePermiso): bool
     {
         return $this->hasRole('admin') || $this->hasPermission($nombrePermiso);
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->clave;
     }
 }

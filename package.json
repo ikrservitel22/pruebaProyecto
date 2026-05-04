@@ -17,10 +17,12 @@
     "dependencies": {
         "@carbon/icons-react": "^11.79.0",
         "@carbon/react": "^1.106.0",
+        "@coreui/coreui": "^5.6.1",
         "@fullcalendar/core": "^6.1.20",
         "@fullcalendar/daygrid": "^6.1.20",
         "@fullcalendar/list": "^6.1.20",
         "@fullcalendar/timegrid": "^6.1.20",
+        "@popperjs/core": "^2.11.8",
         "sass": "^1.99.0"
     }
 }
