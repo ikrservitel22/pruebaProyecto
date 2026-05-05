@@ -3,11 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\ApiController;
 
 
 
+Route::post('/login', [ApiController::class, 'login']);
 
-Route::post('/login', [UsuariosController::class, 'login']);
 
 Route::middleware('Jwt')->group(function () {
     Route::get('/test', function () {
@@ -17,9 +18,13 @@ Route::middleware('Jwt')->group(function () {
     });
 });
 
-Route::middleware('auth:api')->group(function () {
-    Route::get('/horarios', [HorarioController::class, 'Horario']);
-    Route::post('/horarios', [HorarioController::class, 'store']);
-    Route::put('/horarios/{id}', [HorarioController::class, 'update']);
-    Route::delete('/horarios/{id}', [HorarioController::class, 'destroy']);
+
+Route::middleware('Jwt:delete')->group(function () {
+    Route::get('/usuarios', [ApiController::class, 'usuariou']); // todos
+    Route::get('/usuarios/{id}', [ApiController::class, 'usuarios']); // uno
+});
+
+Route::middleware('Jwt:create')->group(function () {
+    Route::get('/horarios', [ApiController::class, 'horariou']); // todos
+    Route::get('/horarios/{id}', [ApiController::class, 'horarios']); // uno
 });

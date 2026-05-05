@@ -16,7 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'check.session' => CheckSession::class,
             'check.permission' => CheckPermission::class,
-            'api.key' => \App\Http\Middleware\ApiKeyMiddleware::class,
             'Jwt' => \App\Http\Middleware\JwtMiddleware::class,
         ]);
     })
