@@ -14,6 +14,7 @@ use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FestivosController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\IaController;
 
 
 /*
@@ -127,3 +128,7 @@ Route::get('/roles', [RolesController::class, 'index'])->name('roles.index');
 Route::post('/crear-rol', [RolesController::class, 'createRol'])->name('roles.store');
 
 Route::put('/editar-rol/{id}', [RolesController::class, 'update'])->name('roles.update');
+
+Route::get('/ia', [IaController::class, 'index']);
+
+Route::post('/ia/chat', [IaController::class, 'chat']);
