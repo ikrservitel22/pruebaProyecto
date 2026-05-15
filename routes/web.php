@@ -132,3 +132,5 @@ Route::put('/editar-rol/{id}', [RolesController::class, 'update'])->name('roles.
 Route::get('/ia', [IaController::class, 'index']);
 
 Route::post('/ia/chat', [IaController::class, 'chat']);
+
+Route::post('/ia/audio', [IaController::class, 'audio']);

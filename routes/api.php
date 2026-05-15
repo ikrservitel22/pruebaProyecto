@@ -36,3 +36,4 @@ Route::middleware('Jwt:create')->group(function () {
 Route::get('/ia', [IaController::class, 'index']);
 
 Route::post('/ia/chat', [IaController::class, 'chat']);
+
